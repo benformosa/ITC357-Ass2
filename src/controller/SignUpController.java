@@ -10,30 +10,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.Authenticator;
+import util.Authenticator.UserStatus;
 
 @SuppressWarnings("serial")
 public class SignUpController extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
 
-		Authenticator authenticator;
-		try {
-			authenticator = new Authenticator();
-			boolean created = authenticator.newUser(username, password);
+    Authenticator authenticator;
+    try {
+      authenticator = new Authenticator();
+      UserStatus createStatus;
 
-			if (created) {
-				getServletContext().getRequestDispatcher("/login").forward(request,
-				    response);
+      createStatus = authenticator.newUser(username, password);
 
-			} else {
-				request.setAttribute("usernameexists", "true");
-				getServletContext().getRequestDispatcher("/signup").forward(request,
-				    response);
-			}
-		} catch (SQLException | URISyntaxException e) {
-			e.printStackTrace();
-		}
-	}
+      if (createStatus == UserStatus.SUCCESS) {
+        request.setAttribute("logincreated", "true");
+        getServletContext().getRequestDispatcher("/login").forward(request,
+            response);
+      } else if (createStatus == UserStatus.FAILED) {
+        request.setAttribute("usernameexists", "true");
+        getServletContext().getRequestDispatcher("/signup").forward(request,
+            response);
+      } else if (createStatus == UserStatus.USERNAMEBLANK) {
+        request.setAttribute("emptyattribute", "username");
+        getServletContext().getRequestDispatcher("/signup").forward(request,
+            response);
+      } else if (createStatus == UserStatus.PASSWORDBLANK) {
+        request.setAttribute("emptyattribute", "password");
+        getServletContext().getRequestDispatcher("/signup").forward(request,
+            response);
+      }
+    } catch (SQLException | URISyntaxException e) {
+      e.printStackTrace();
+    }
+  }
 }
