@@ -1,5 +1,6 @@
 package util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,12 +43,11 @@ public class ConnectionFactory {
   // server=localhost
   // port=3306
   // database=databasename
-
-  public static Connection getPropertiesFileConnection(String fileName)
+  public static Connection getPropertiesFileConnection(File file)
       throws IOException, SQLException {
 
     Properties properties = new Properties();
-    InputStream inputStream = new FileInputStream(fileName);
+    InputStream inputStream = new FileInputStream(file);
     properties.load(inputStream);
 
     String user = properties.getProperty("user");
@@ -59,13 +59,20 @@ public class ConnectionFactory {
     return getConnection(user, password, server, port, database);
   }
 
+  public static Connection getPropertiesFileConnection(String fileName)
+      throws IOException, SQLException {
+    return getPropertiesFileConnection(new File(fileName));
+  }
+
+  // create a connection, assuming the default filename in the current directory
   public static Connection getConnection() throws IOException, SQLException {
     return getPropertiesFileConnection(util.Email.defaultPropertiesFileName);
   }
 
-  public static Connection getHardCodedConnection() throws SQLException {
-    return getConnection("root", "abc123", "localhost", "3306",
-        "ST11429074email");
+  // create a connection, assuming the default filename in the given directory
+  public static Connection getConnection(String configFilePath)
+      throws IOException, SQLException {
+    return getPropertiesFileConnection(new File(configFilePath,
+        util.Email.defaultPropertiesFileName));
   }
-
 }

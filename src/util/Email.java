@@ -1,7 +1,7 @@
 package util;
 
 public class Email {
-  public static final String defaultPropertiesFileName = "../static/db.properties";
+  public static final String defaultPropertiesFileName = "db.properties";
 
   public static final String userTable = "users";
   public static final String userColumnUsername = "username";

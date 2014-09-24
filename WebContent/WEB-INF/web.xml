@@ -73,7 +73,6 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>SessionFilter</filter-name>
-		<servlet-name>Main</servlet-name>
 		<url-pattern>/secure/*</url-pattern>
 	</filter-mapping>
 

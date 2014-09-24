@@ -26,7 +26,8 @@ public class LoginController extends HttpServlet {
 
     Authenticator authenticator;
     try {
-      authenticator = new Authenticator();
+      authenticator = new Authenticator(this.getServletConfig()
+          .getServletContext().getRealPath("/WEB-INF"));
       UserStatus authenticated = authenticator.authenticate(username, password);
       if (authenticated == UserStatus.SUCCESS) {
 

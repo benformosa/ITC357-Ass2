@@ -14,9 +14,9 @@ public class Authenticator {
     USERNAMEBLANK, PASSWORDBLANK, FAILED, SUCCESS
   }
 
-  public Authenticator() throws SQLException, IOException, URISyntaxException {
-    // connection = ConnectionFactory.getConnection();
-    connection = ConnectionFactory.getHardCodedConnection();
+  public Authenticator(String configFilePath) throws SQLException, IOException,
+      URISyntaxException {
+    connection = ConnectionFactory.getConnection(configFilePath);
   }
 
   public UserStatus authenticate(String username, String password) {
