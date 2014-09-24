@@ -57,6 +57,15 @@
 		<servlet-name>SignUpController</servlet-name>
 		<url-pattern>/signupcontroller</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>MessageController</servlet-name>
+    <servlet-class>controller.MessageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MessageController</servlet-name>
+    <url-pattern>/secure/messages</url-pattern>
+  </servlet-mapping>
 
 	<servlet>
 		<servlet-name>Main</servlet-name>

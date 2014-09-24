@@ -1,24 +1,15 @@
 package model;
 
 public class Message {
-  String Body;
-  int recipientId;
-  int senderId;
-  String subject;
+  public String body;
+  public String recipient;
+  public String sender;
+  public String subject;
 
-  public String getBody() {
-    return Body;
-  }
-
-  public int getRecipientId() {
-    return recipientId;
-  }
-
-  public int getSenderId() {
-    return senderId;
-  }
-
-  public String getSubject() {
-    return subject;
+  public Message(String sender, String recipient, String subject, String body) {
+    this.sender = sender;
+    this.recipient = recipient;
+    this.subject = subject;
+    this.body = body;
   }
 }

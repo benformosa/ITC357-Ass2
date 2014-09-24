@@ -4,4 +4,11 @@ create table ST11429074email.users (
   hashedpassword blob not null,
   salt blob not null,
   primary key (username));
-alter table ST11429074email.users auto_increment = 1;
+create table ST11429074email.messages (
+  id int not null auto_increment,
+  sender varchar(40) not null,
+  recipient varchar(40) not null,
+  subject varchar(200) not null,
+  body varchar(1000),
+  primary key (id));
+alter table ST11429074email.messages auto_increment=1;

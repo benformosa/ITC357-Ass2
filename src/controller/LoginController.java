@@ -33,19 +33,18 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.setAttribute("username", username);
-        System.out.println("login success for "
-          + session.getAttribute("username"));
+        log("login success for " + session.getAttribute("username"));
 
         response.sendRedirect(request.getContextPath() + "/secure/main");
       } else {
         if (authenticated == UserStatus.FAILED) {
-          System.out.println("Login failed for " + username);
+          log("Login failed for " + username);
           request.setAttribute("loginfailed", "true");
         } else if (authenticated == UserStatus.USERNAMEBLANK) {
-          System.out.println("No username");
+          log("No username");
           request.setAttribute("emptyattribute", "username");
         } else if (authenticated == UserStatus.PASSWORDBLANK) {
-          System.out.println("No password for " + username);
+          log("No password for " + username);
           request.setAttribute("emptyattribute", "password");
         }
         getServletContext().getRequestDispatcher("/login").forward(request,
