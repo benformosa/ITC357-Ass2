@@ -1,0 +1,37 @@
+body {
+  font-family: verdana;
+  font-size: 16px;
+}  
+
+input {
+  border: 1px solid darkgrey;
+  padding: 2px;
+}
+
+label {
+  text-align: right;
+  margin-right: 15px;
+}
+
+table, tr, th, td {
+  border: 1px solid darkgrey;
+  border-collapse: collapse; 
+  padding: 5px;
+}
+
+th {
+  background: grey;
+  text-align: left;
+}
+
+tr:nth-child(even) td {
+  background: white;
+}
+
+tr:nth-child(odd) td {
+  background: lightgrey;
+}
+
+.error {
+  color: red;
+}

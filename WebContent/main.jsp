@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Email</title>
+<link rel="stylesheet" type="text/css" href="static/css/email.css">
 </head>
 <body>
+  <h1>Email</h1>
+
+You are signed in.
 
 </body>
 </html>

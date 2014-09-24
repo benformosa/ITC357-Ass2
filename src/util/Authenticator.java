@@ -8,78 +8,91 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Authenticator {
-  private Connection connection;
+	private Connection connection;
 
-  public Authenticator() throws SQLException, IOException, URISyntaxException {
-    // connection = ConnectionFactory.getConnection();
-    connection = ConnectionFactory.getHardCodedConnection();
-  }
+	public static enum authstatus {
+		USERNAMEBLANK, PASSWORDBLANK, AUTHFAILED, AUTHSUCCESS
+	}
 
-  public boolean authenticate(String username, String password) {
-    String query = "select " + util.Email.userColumnUsername + ","
-      + util.Email.userColumnHashedPassword + "," + util.Email.userColumnSalt
-      + " from " + util.Email.userTable + " where "
-      + util.Email.userColumnUsername + "= ?";
+	public Authenticator() throws SQLException, IOException, URISyntaxException {
+		// connection = ConnectionFactory.getConnection();
+		connection = ConnectionFactory.getHardCodedConnection();
+	}
 
-    System.out.println(query);
+	public authstatus authenticate(String username, String password) {
+		if (username.isEmpty() | username == null) {
+			return authstatus.USERNAMEBLANK;
+		}
+		if (password.isEmpty() | password == null) {
+			return authstatus.PASSWORDBLANK;
+		}
 
-    boolean authenticate = false;
-    byte[] dbHashedPassword = null;
-    byte[] dbSalt = null;
-    PreparedStatement s = null;
-    ResultSet r = null;
-    try {
-      s = connection.prepareStatement(query);
-      s.setString(1, username);
-      r = s.executeQuery();
+		String query = "select " + util.Email.userColumnUsername + ","
+		    + util.Email.userColumnHashedPassword + "," + util.Email.userColumnSalt
+		    + " from " + util.Email.userTable + " where "
+		    + util.Email.userColumnUsername + " = ?";
 
-      while (r.next()) {
-        dbHashedPassword = r.getBytes(util.Email.userColumnHashedPassword);
-        dbSalt = r.getBytes(util.Email.userColumnSalt);
-      }
+		authstatus authenticated = authstatus.AUTHFAILED;
+		byte[] dbHashedPassword = null;
+		byte[] dbSalt = null;
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			s = connection.prepareStatement(query);
+			s.setString(1, username);
+			r = s.executeQuery();
 
-      authenticate = Passwords.isExpectedPassword(password.toCharArray(),
-          dbSalt, dbHashedPassword);
+			while (r.next()) {
+				dbHashedPassword = r.getBytes(util.Email.userColumnHashedPassword);
+				dbSalt = r.getBytes(util.Email.userColumnSalt);
+			}
 
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return authenticate;
-  }
+			boolean correctPassword = Passwords.isExpectedPassword(
+			    password.toCharArray(), dbSalt, dbHashedPassword);
+			if (correctPassword) {
+				authenticated = authstatus.AUTHSUCCESS;
+			}
 
-  public boolean newUser(String username, String password) {
-    String query = "select " + util.Email.userColumnUsername + " where "
-      + util.Email.userColumnUsername + "= ?";
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authenticated;
+	}
 
-    PreparedStatement s = null;
-    ResultSet r = null;
-    try {
-      s = connection.prepareStatement(query);
-      s.setString(1, username);
-      r = s.executeQuery();
+	public boolean newUser(String username, String password) {
+		String query = "select " + util.Email.userColumnUsername + " from "
+		    + util.Email.userTable + " where " + util.Email.userColumnUsername
+		    + " = ?";
 
-      // if username is available
-      if (!r.next()) {
-        // insert new user
-        s = connection.prepareStatement("insert into " + Email.userTable + " ("
-          + Email.userColumnUsername + "," + Email.userColumnHashedPassword
-          + "," + Email.userColumnSalt + ") " + "values (?, ?, ?)");
+		PreparedStatement s = null;
+		ResultSet r = null;
+		try {
+			s = connection.prepareStatement(query);
+			s.setString(1, username);
+			r = s.executeQuery();
 
-        byte[] salt = Passwords.getNextSalt();
+			// if username is available
+			if (!r.next()) {
+				// insert new user
+				s = connection.prepareStatement("insert into " + Email.userTable + " ("
+				    + Email.userColumnUsername + "," + Email.userColumnHashedPassword
+				    + "," + Email.userColumnSalt + ") " + "values (?, ?, ?)");
 
-        s.setString(1, username);
-        s.setBytes(2, Passwords.hash(password.toCharArray(), salt));
-        s.setBytes(3, salt);
-        s.executeUpdate();
+				byte[] salt = Passwords.getNextSalt();
 
-        return true;
-      } else {
-        return false;
-      }
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-    }
+				s.setString(1, username);
+				s.setBytes(2, Passwords.hash(password.toCharArray(), salt));
+				s.setBytes(3, salt);
+				s.executeUpdate();
 
-    return false;
-  }
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		return false;
+	}
 }
