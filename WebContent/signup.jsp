@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Email</title>
-<link rel="stylesheet" type="text/css" href="static/css/email.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/email.css">
 </head>
 <body>
 	<h1>Email</h1>
@@ -24,6 +24,8 @@
 		<input type="password" id="password" name="password"><br>
 
 		<input type="submit" value="Sign Up"><br>
+		
+		<a href="login">Login</a>
 	</form>
 </body>
 </html>

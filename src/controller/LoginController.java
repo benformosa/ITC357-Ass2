@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import util.Authenticator;
 import util.Authenticator.authstatus;
@@ -28,7 +29,12 @@ public class LoginController extends HttpServlet {
 			authenticator = new Authenticator();
 			authstatus authenticated = authenticator.authenticate(username, password);
 			if (authenticated == authstatus.AUTHSUCCESS) {
-				System.out.println("login success for " + username);
+
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
+				System.out.println("login success for "
+				    + session.getAttribute("username"));
+
 				getServletContext().getRequestDispatcher("/main").forward(request,
 				    response);
 			} else {
