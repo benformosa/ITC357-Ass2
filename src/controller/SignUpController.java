@@ -22,7 +22,8 @@ public class SignUpController extends HttpServlet {
 
     Authenticator authenticator;
     try {
-      authenticator = new Authenticator();
+      authenticator = new Authenticator(this.getServletConfig()
+          .getServletContext().getRealPath("/WEB-INF"));
       UserStatus createStatus;
 
       createStatus = authenticator.newUser(username, password);
