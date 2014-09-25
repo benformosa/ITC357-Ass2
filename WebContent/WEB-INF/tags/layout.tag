@@ -17,7 +17,7 @@
 	<br>
 	<footer>
 		<div class="links">
-			<a href="<c:url value="/secure/main" />">Inbox</a> <a href="<c:url value="/secure/users" />">Users</a>
+			<a href="<c:url value="/secure/main" />">Inbox</a> <a href="<c:url value="/secure/users" />">Users</a> <a href="<c:url value="/secure/newmessage" />">New Message</a>
 		</div>
 		<div class="login">
 			<a href="<c:url value="/logout" />">Log out

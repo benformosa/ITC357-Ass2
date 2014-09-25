@@ -36,14 +36,26 @@ public class UserDAO {
     ResultSet r = null;
     try {
       s = connection.prepareStatement(query);
-      r = s.executeQuery();
+      try {
+        r = s.executeQuery();
 
-      while (r.next()) {
-        String username = r.getString(User.userColumnUsername);
-        users.add(new User(username));
+        while (r.next()) {
+          String username = r.getString(User.userColumnUsername);
+          users.add(new User(username));
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
       }
     } catch (SQLException e) {
       e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
     return users.toArray(new User[users.size()]);
   }
@@ -68,25 +80,36 @@ public class UserDAO {
     try {
       s = connection.prepareStatement(query);
       s.setString(1, username);
-      r = s.executeQuery();
+      try {
+        r = s.executeQuery();
 
-      while (r.next()) {
-        dbHashedPassword = r.getBytes(User.userColumnHashedPassword);
-        dbSalt = r.getBytes(User.userColumnSalt);
+        while (r.next()) {
+          dbHashedPassword = r.getBytes(User.userColumnHashedPassword);
+          dbSalt = r.getBytes(User.userColumnSalt);
+        }
+
+        if (dbHashedPassword == null | dbSalt == null) {
+          return UserStatus.FAILED;
+        }
+
+        boolean correctPassword = Passwords.isExpectedPassword(
+            password.toCharArray(), dbSalt, dbHashedPassword);
+        if (correctPassword) {
+          authenticated = UserStatus.SUCCESS;
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
       }
-
-      if (dbHashedPassword == null | dbSalt == null) {
-        return UserStatus.FAILED;
-      }
-
-      boolean correctPassword = Passwords.isExpectedPassword(
-          password.toCharArray(), dbSalt, dbHashedPassword);
-      if (correctPassword) {
-        authenticated = UserStatus.SUCCESS;
-      }
-
     } catch (SQLException e) {
       e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
     return authenticated;
   }
@@ -107,28 +130,41 @@ public class UserDAO {
     try {
       s = connection.prepareStatement(query);
       s.setString(1, username);
-      r = s.executeQuery();
+      try {
+        r = s.executeQuery();
 
-      // if username is available
-      if (!r.next()) {
-        // insert new user
-        s = connection.prepareStatement("insert into " + User.userTable + " ("
-          + User.userColumnUsername + "," + User.userColumnHashedPassword + ","
-          + User.userColumnSalt + ") " + "values (?, ?, ?)");
+        // if username is available
+        if (!r.next()) {
+          // insert new user
+          s = connection.prepareStatement("insert into " + User.userTable
+            + " (" + User.userColumnUsername + ","
+            + User.userColumnHashedPassword + "," + User.userColumnSalt + ") "
+            + "values (?, ?, ?)");
 
-        byte[] salt = Passwords.getNextSalt();
+          byte[] salt = Passwords.getNextSalt();
 
-        s.setString(1, username);
-        s.setBytes(2, Passwords.hash(password.toCharArray(), salt));
-        s.setBytes(3, salt);
-        s.executeUpdate();
+          s.setString(1, username);
+          s.setBytes(2, Passwords.hash(password.toCharArray(), salt));
+          s.setBytes(3, salt);
+          s.executeUpdate();
 
-        return UserStatus.SUCCESS;
-      } else {
-        return UserStatus.FAILED;
+          return UserStatus.SUCCESS;
+        } else {
+          return UserStatus.FAILED;
+        }
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+      } finally {
+        r.close();
       }
     } catch (SQLException ex) {
       ex.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
 
     return UserStatus.FAILED;

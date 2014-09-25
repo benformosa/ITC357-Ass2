@@ -21,23 +21,23 @@ public class SignUpController extends HttpServlet {
     UserDAO userDAO;
     userDAO = new UserDAO(this.getServletConfig().getServletContext()
         .getRealPath("/WEB-INF"));
-    UserStatus createStatus;
+    UserStatus status;
 
-    createStatus = userDAO.newUser(username, password);
+    status = userDAO.newUser(username, password);
 
-    if (createStatus == UserStatus.SUCCESS) {
+    if (status == UserStatus.SUCCESS) {
       request.setAttribute("logincreated", "true");
       getServletContext().getRequestDispatcher("/login").forward(request,
           response);
-    } else if (createStatus == UserStatus.FAILED) {
+    } else if (status == UserStatus.FAILED) {
       request.setAttribute("usernameexists", "true");
       getServletContext().getRequestDispatcher("/signup").forward(request,
           response);
-    } else if (createStatus == UserStatus.USERNAMEBLANK) {
+    } else if (status == UserStatus.USERNAMEBLANK) {
       request.setAttribute("emptyattribute", "username");
       getServletContext().getRequestDispatcher("/signup").forward(request,
           response);
-    } else if (createStatus == UserStatus.PASSWORDBLANK) {
+    } else if (status == UserStatus.PASSWORDBLANK) {
       request.setAttribute("emptyattribute", "password");
       getServletContext().getRequestDispatcher("/signup").forward(request,
           response);

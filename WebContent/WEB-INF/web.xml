@@ -39,6 +39,24 @@
 		<servlet-name>SignUp</servlet-name>
 		<url-pattern>/signup</url-pattern>
 	</servlet-mapping>
+	
+	 <servlet>
+    <servlet-name>NewMessage</servlet-name>
+    <jsp-file>/newmessage.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewMessage</servlet-name>
+    <url-pattern>/secure/newmessage</url-pattern>
+  </servlet-mapping>
+  
+     <servlet>
+    <servlet-name>NewMessageController</servlet-name>
+    <servlet-class>com.github.benformosa.email.controller.NewMessageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewMessageController</servlet-name>
+    <url-pattern>/secure/newmessagecontroller</url-pattern>
+  </servlet-mapping>
 
 	<servlet>
 		<servlet-name>LoginController</servlet-name>
@@ -65,6 +83,7 @@
 	<servlet-mapping>
 		<servlet-name>MessagesController</servlet-name>
 		<url-pattern>/secure/main</url-pattern>
+		<url-pattern>/secure/inbox</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
