@@ -14,7 +14,12 @@
 
 	Welcome
 	<%=session.getAttribute("username")%>
-	<br> You are signed in.
+	<br>
+	<br>
+
+	<a href="<c:url value="/secure/messagescontroller" />">View Messages</a>
+	<br>
+  <br>
 
 	<a href="<c:url value="/logout" />">Logout</a>
 </body>

@@ -14,20 +14,27 @@
 	<h2>Messages</h2>
 
 	<%
-	  Message[] messages = (Message[]) request.getAttribute("messages");
-	  if (messages.length == 0) {
+		Message[] messages = (Message[]) request.getAttribute("messages");
+		if (messages != null) {
+
+			if (messages.length == 0) {
 	%>
 	No messages found.
 	<%
-	  } else {
-	    for (Message m : messages) {
+		} else {
+				for (Message m : messages) {
 	%>
 	<%=m.sender%>
 	:
 	<%=m.subject%>
 	<%
-	  }
-	  }
+		}
+			}
+		} else {
+	%>
+	No messages found.
+	<%
+		}
 	%>
 
 </body>

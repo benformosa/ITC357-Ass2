@@ -64,8 +64,17 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>MessageController</servlet-name>
-    <url-pattern>/secure/messages</url-pattern>
+    <url-pattern>/secure/messagescontroller</url-pattern>
   </servlet-mapping>
+
+	<servlet>
+		<servlet-name>Messages</servlet-name>
+		<jsp-file>/messages.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Messages</servlet-name>
+		<url-pattern>/secure/messages</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Main</servlet-name>
