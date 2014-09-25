@@ -1,4 +1,4 @@
-package controller;
+package com.github.benformosa.email.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import util.Authenticator;
-import util.Authenticator.UserStatus;
+import com.github.benformosa.email.model.UserDAO;
+import com.github.benformosa.email.model.UserDAO.UserStatus;
+
 
 @SuppressWarnings("serial")
 public class SignUpController extends HttpServlet {
@@ -20,13 +21,13 @@ public class SignUpController extends HttpServlet {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
 
-    Authenticator authenticator;
+    UserDAO userDAO;
     try {
-      authenticator = new Authenticator(this.getServletConfig()
+      userDAO = new UserDAO(this.getServletConfig()
           .getServletContext().getRealPath("/WEB-INF"));
       UserStatus createStatus;
 
-      createStatus = authenticator.newUser(username, password);
+      createStatus = userDAO.newUser(username, password);
 
       if (createStatus == UserStatus.SUCCESS) {
         request.setAttribute("logincreated", "true");

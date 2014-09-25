@@ -1,4 +1,4 @@
-package util;
+package com.github.benformosa.email.util;
 
 import java.io.IOException;
 

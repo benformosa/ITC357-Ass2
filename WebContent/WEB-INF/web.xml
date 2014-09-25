@@ -64,7 +64,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>MessageController</servlet-name>
-    <url-pattern>/secure/messagescontroller</url-pattern>
+    <url-pattern>/secure/main</url-pattern>
   </servlet-mapping>
 
 	<servlet>
@@ -75,15 +75,15 @@
 		<servlet-name>Messages</servlet-name>
 		<url-pattern>/secure/messages</url-pattern>
 	</servlet-mapping>
-
+	
 	<servlet>
-		<servlet-name>Main</servlet-name>
-		<jsp-file>/main.jsp</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Main</servlet-name>
-		<url-pattern>/secure/main</url-pattern>
-	</servlet-mapping>
+    <servlet-name>Message</servlet-name>
+    <jsp-file>/message.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Message</servlet-name>
+    <url-pattern>/secure/message</url-pattern>
+  </servlet-mapping>
 
 	<filter>
 		<filter-name>SessionFilter</filter-name>

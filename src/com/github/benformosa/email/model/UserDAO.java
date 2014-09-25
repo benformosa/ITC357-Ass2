@@ -1,4 +1,4 @@
-package util;
+package com.github.benformosa.email.model;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,14 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Authenticator {
+import com.github.benformosa.email.util.ConnectionFactory;
+import com.github.benformosa.email.util.Passwords;
+
+
+public class UserDAO {
   private Connection connection;
 
   public static enum UserStatus {
     USERNAMEBLANK, PASSWORDBLANK, FAILED, SUCCESS
   }
 
-  public Authenticator(String configFilePath) throws SQLException, IOException,
+  public UserDAO(String configFilePath) throws SQLException, IOException,
       URISyntaxException {
     connection = ConnectionFactory.getConnection(configFilePath);
   }
@@ -27,10 +31,9 @@ public class Authenticator {
       return UserStatus.PASSWORDBLANK;
     }
 
-    String query = "select " + util.Email.userColumnUsername + ","
-      + util.Email.userColumnHashedPassword + "," + util.Email.userColumnSalt
-      + " from " + util.Email.userTable + " where "
-      + util.Email.userColumnUsername + " = ?";
+    String query = "select " + User.userColumnUsername + ","
+      + User.userColumnHashedPassword + "," + User.userColumnSalt + " from "
+      + User.userTable + " where " + User.userColumnUsername + " = ?";
 
     UserStatus authenticated = UserStatus.FAILED;
     byte[] dbHashedPassword = null;
@@ -43,8 +46,8 @@ public class Authenticator {
       r = s.executeQuery();
 
       while (r.next()) {
-        dbHashedPassword = r.getBytes(util.Email.userColumnHashedPassword);
-        dbSalt = r.getBytes(util.Email.userColumnSalt);
+        dbHashedPassword = r.getBytes(User.userColumnHashedPassword);
+        dbSalt = r.getBytes(User.userColumnSalt);
       }
 
       if (dbHashedPassword == null | dbSalt == null) {
@@ -71,9 +74,8 @@ public class Authenticator {
       return UserStatus.PASSWORDBLANK;
     }
 
-    String query = "select " + util.Email.userColumnUsername + " from "
-      + util.Email.userTable + " where " + util.Email.userColumnUsername
-      + " = ?";
+    String query = "select " + User.userColumnUsername + " from "
+      + User.userTable + " where " + User.userColumnUsername + " = ?";
 
     PreparedStatement s = null;
     ResultSet r = null;
@@ -85,9 +87,9 @@ public class Authenticator {
       // if username is available
       if (!r.next()) {
         // insert new user
-        s = connection.prepareStatement("insert into " + Email.userTable + " ("
-          + Email.userColumnUsername + "," + Email.userColumnHashedPassword
-          + "," + Email.userColumnSalt + ") " + "values (?, ?, ?)");
+        s = connection.prepareStatement("insert into " + User.userTable + " ("
+          + User.userColumnUsername + "," + User.userColumnHashedPassword + ","
+          + User.userColumnSalt + ") " + "values (?, ?, ?)");
 
         byte[] salt = Passwords.getNextSalt();
 

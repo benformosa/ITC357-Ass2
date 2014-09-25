@@ -1,4 +1,4 @@
-package util;
+package com.github.benformosa.email.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionFactory {
+  public static final String defaultPropertiesFileName = "db.properties";
 
   /*
    * Create a new connection given the database server details.
@@ -66,13 +67,13 @@ public class ConnectionFactory {
 
   // create a connection, assuming the default filename in the current directory
   public static Connection getConnection() throws IOException, SQLException {
-    return getPropertiesFileConnection(util.Email.defaultPropertiesFileName);
+    return getPropertiesFileConnection(defaultPropertiesFileName);
   }
 
   // create a connection, assuming the default filename in the given directory
   public static Connection getConnection(String configFilePath)
       throws IOException, SQLException {
     return getPropertiesFileConnection(new File(configFilePath,
-        util.Email.defaultPropertiesFileName));
+        defaultPropertiesFileName));
   }
 }
