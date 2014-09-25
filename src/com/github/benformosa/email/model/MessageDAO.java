@@ -21,6 +21,34 @@ public class MessageDAO {
     }
   }
 
+  public Message getMessage(int id) {
+    String query = "select " + Message.messageColumnId + ","
+      + Message.messageColumnSender + "," + Message.messageColumnRecipient
+      + "," + Message.messageColumnSubject + "," + Message.messageColumnBody
+      + " from " + Message.messageTable + " where " + Message.messageColumnId
+      + " = ?";
+
+    Message message = null;
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setInt(1, id);
+      r = s.executeQuery();
+
+      while (r.next()) {
+        String sender = r.getString(Message.messageColumnSender);
+        String recipient = r.getString(Message.messageColumnRecipient);
+        String subject = r.getString(Message.messageColumnSubject);
+        String body = r.getString(Message.messageColumnBody);
+        message = new Message(id, sender, recipient, subject, body);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return message;
+  }
+
   public Message[] getMessages(String username) {
     List<Message> messages = new ArrayList<Message>();
 

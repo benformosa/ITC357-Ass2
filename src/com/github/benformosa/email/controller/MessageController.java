@@ -18,27 +18,14 @@ public class MessageController extends HttpServlet {
       throws ServletException, IOException {
     HttpSession session = request.getSession();
 
-    MessageDAO mDAO = new MessageDAO(this.getServletConfig()
+    MessageDAO messageDAO = new MessageDAO(this.getServletConfig()
         .getServletContext().getRealPath("/WEB-INF"));
 
-    // get a list of messages
-    // forward to messages.jsp
+    // get a list of messages and forward to messages.jsp
     request.setAttribute("messages",
-        mDAO.getMessages((String) session.getAttribute("username")));
+        messageDAO.getMessages((String) session.getAttribute("username")));
 
     getServletContext().getRequestDispatcher("/secure/messages").forward(
         request, response);
-    // select * from messages where username =
-    // session.getAttribute("username")
-
   }
-
-  // GET
-  // / - list messages addressed to current logged in user
-  // /[id] - get message with id [id]
-
-  // PUT
-  // /new - form for sending message
-  // /create -
-
 }

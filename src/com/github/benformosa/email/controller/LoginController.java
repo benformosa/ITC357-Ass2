@@ -1,8 +1,6 @@
 package com.github.benformosa.email.controller;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import com.github.benformosa.email.model.UserDAO;
 import com.github.benformosa.email.model.UserDAO.UserStatus;
-
 
 @SuppressWarnings("serial")
 public class LoginController extends HttpServlet {
@@ -26,33 +23,29 @@ public class LoginController extends HttpServlet {
     String password = request.getParameter("password");
 
     UserDAO userDAO;
-    try {
-      userDAO = new UserDAO(this.getServletConfig()
-          .getServletContext().getRealPath("/WEB-INF"));
-      UserStatus authenticated = userDAO.authenticate(username, password);
-      if (authenticated == UserStatus.SUCCESS) {
+    userDAO = new UserDAO(this.getServletConfig().getServletContext()
+        .getRealPath("/WEB-INF"));
+    UserStatus authenticated = userDAO.authenticate(username, password);
+    if (authenticated == UserStatus.SUCCESS) {
 
-        HttpSession session = request.getSession();
-        session.setAttribute("username", username);
-        log("login success for " + session.getAttribute("username"));
+      HttpSession session = request.getSession();
+      session.setAttribute("username", username);
+      log("login success for " + session.getAttribute("username"));
 
-        response.sendRedirect(request.getContextPath() + "/secure/main");
-      } else {
-        if (authenticated == UserStatus.FAILED) {
-          log("Login failed for " + username);
-          request.setAttribute("loginfailed", "true");
-        } else if (authenticated == UserStatus.USERNAMEBLANK) {
-          log("No username");
-          request.setAttribute("emptyattribute", "username");
-        } else if (authenticated == UserStatus.PASSWORDBLANK) {
-          log("No password for " + username);
-          request.setAttribute("emptyattribute", "password");
-        }
-        getServletContext().getRequestDispatcher("/login").forward(request,
-            response);
+      response.sendRedirect(request.getContextPath() + "/secure/main");
+    } else {
+      if (authenticated == UserStatus.FAILED) {
+        log("Login failed for " + username);
+        request.setAttribute("loginfailed", "true");
+      } else if (authenticated == UserStatus.USERNAMEBLANK) {
+        log("No username");
+        request.setAttribute("emptyattribute", "username");
+      } else if (authenticated == UserStatus.PASSWORDBLANK) {
+        log("No password for " + username);
+        request.setAttribute("emptyattribute", "password");
       }
-    } catch (SQLException | URISyntaxException e) {
-      e.printStackTrace();
+      getServletContext().getRequestDispatcher("/login").forward(request,
+          response);
     }
   }
 }

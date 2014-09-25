@@ -42,7 +42,7 @@
 
 	<servlet>
 		<servlet-name>LoginController</servlet-name>
-		<servlet-class>controller.LoginController</servlet-class>
+		<servlet-class>com.github.benformosa.email.controller.LoginController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginController</servlet-name>
@@ -51,21 +51,21 @@
 
 	<servlet>
 		<servlet-name>SignUpController</servlet-name>
-		<servlet-class>controller.SignUpController</servlet-class>
+		<servlet-class>com.github.benformosa.email.controller.SignUpController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SignUpController</servlet-name>
 		<url-pattern>/signupcontroller</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-    <servlet-name>MessageController</servlet-name>
-    <servlet-class>controller.MessageController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MessageController</servlet-name>
-    <url-pattern>/secure/main</url-pattern>
-  </servlet-mapping>
+		<servlet-name>MessageController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.MessageController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessageController</servlet-name>
+		<url-pattern>/secure/main</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Messages</servlet-name>
@@ -75,19 +75,37 @@
 		<servlet-name>Messages</servlet-name>
 		<url-pattern>/secure/messages</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-    <servlet-name>Message</servlet-name>
-    <jsp-file>/message.jsp</jsp-file>
+
+  <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>com.github.benformosa.email.controller.UserController</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Message</servlet-name>
-    <url-pattern>/secure/message</url-pattern>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/secure/users</url-pattern>
   </servlet-mapping>
+
+	<servlet>
+		<servlet-name>Users</servlet-name>
+		<jsp-file>/users.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Users</servlet-name>
+		<url-pattern>/secure/userspage</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Message</servlet-name>
+		<jsp-file>/message.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Message</servlet-name>
+		<url-pattern>/secure/message</url-pattern>
+	</servlet-mapping>
 
 	<filter>
 		<filter-name>SessionFilter</filter-name>
-		<filter-class>util.SessionFilter</filter-class>
+		<filter-class>com.github.benformosa.email.util.SessionFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>SessionFilter</filter-name>

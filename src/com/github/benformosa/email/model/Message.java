@@ -23,9 +23,23 @@ public class Message {
     this.body = body;
   }
 
-  public static Message getMessage(int id) {
+  public String getBody() {
+    return body;
+  }
 
-    return null;
+  public int getId() {
+    return id;
+  }
 
+  public String getRecipient() {
+    return recipient;
+  }
+
+  public String getSender() {
+    return sender;
+  }
+
+  public String getSubject() {
+    return subject;
   }
 }

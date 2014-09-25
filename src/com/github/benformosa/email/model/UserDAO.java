@@ -1,15 +1,15 @@
 package com.github.benformosa.email.model;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.benformosa.email.util.ConnectionFactory;
 import com.github.benformosa.email.util.Passwords;
-
 
 public class UserDAO {
   private Connection connection;
@@ -18,9 +18,34 @@ public class UserDAO {
     USERNAMEBLANK, PASSWORDBLANK, FAILED, SUCCESS
   }
 
-  public UserDAO(String configFilePath) throws SQLException, IOException,
-      URISyntaxException {
-    connection = ConnectionFactory.getConnection(configFilePath);
+  public UserDAO(String configFilePath) {
+    try {
+      connection = ConnectionFactory.getConnection(configFilePath);
+    } catch (IOException | SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public User[] getUsers() {
+    List<User> users = new ArrayList<User>();
+
+    String query = "select " + User.userColumnUsername + " from "
+      + User.userTable;
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      r = s.executeQuery();
+
+      while (r.next()) {
+        String username = r.getString(User.userColumnUsername);
+        users.add(new User(username));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return users.toArray(new User[users.size()]);
   }
 
   public UserStatus authenticate(String username, String password) {

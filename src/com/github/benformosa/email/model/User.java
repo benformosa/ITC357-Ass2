@@ -6,5 +6,13 @@ public class User {
   public static final String userColumnUsername = "username";
   public static final String userTable = "users";
 
-  String username;
+  public String username;
+
+  public User(String username) {
+    this.username = username;
+  }
+
+  public String getUsername() {
+    return username;
+  }
 }
