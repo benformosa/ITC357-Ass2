@@ -8,11 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.github.benformosa.email.model.Message;
 import com.github.benformosa.email.model.MessageDAO;
 
 @SuppressWarnings("serial")
-public class MessageController extends HttpServlet {
+public class MessagesController extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -22,15 +21,11 @@ public class MessageController extends HttpServlet {
     MessageDAO messageDAO = new MessageDAO(this.getServletConfig()
         .getServletContext().getRealPath("/WEB-INF"));
 
-    try {
-      int id = Integer.parseInt(request.getParameter("id"));
-      Message message = messageDAO.getMessage(id);
-      if (message.getRecipient().equals(session.getAttribute("username"))) {
-        request.setAttribute("message", message);
-      }
-    } catch (NumberFormatException | NullPointerException e) {
-    }
-    getServletContext().getRequestDispatcher("/secure/messagepage").forward(
+    // get a list of messages and forward to messages.jsp
+    request.setAttribute("messages",
+        messageDAO.getMessages((String) session.getAttribute("username")));
+
+    getServletContext().getRequestDispatcher("/secure/messages").forward(
         request, response);
   }
 }

@@ -59,11 +59,11 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>MessageController</servlet-name>
-		<servlet-class>com.github.benformosa.email.controller.MessageController</servlet-class>
+		<servlet-name>MessagesController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.MessagesController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>MessageController</servlet-name>
+		<servlet-name>MessagesController</servlet-name>
 		<url-pattern>/secure/main</url-pattern>
 	</servlet-mapping>
 
@@ -94,13 +94,22 @@
 		<url-pattern>/secure/userspage</url-pattern>
 	</servlet-mapping>
 
+  <servlet>
+    <servlet-name>MessageController</servlet-name>
+    <servlet-class>com.github.benformosa.email.controller.MessageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MessageController</servlet-name>
+    <url-pattern>/secure/message</url-pattern>
+  </servlet-mapping>
+
 	<servlet>
 		<servlet-name>Message</servlet-name>
 		<jsp-file>/message.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Message</servlet-name>
-		<url-pattern>/secure/message</url-pattern>
+		<url-pattern>/secure/messagepage</url-pattern>
 	</servlet-mapping>
 
 	<filter>
