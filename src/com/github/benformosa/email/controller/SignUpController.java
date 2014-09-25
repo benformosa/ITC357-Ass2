@@ -10,8 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import com.github.benformosa.email.model.UserDAO;
 import com.github.benformosa.email.model.UserDAO.UserStatus;
 
-@SuppressWarnings("serial")
 public class SignUpController extends HttpServlet {
+  private static final long serialVersionUID = 1L;
+
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    request.getRequestDispatcher("/signuppage").forward(request, response);
+  }
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -26,20 +33,18 @@ public class SignUpController extends HttpServlet {
     status = userDAO.newUser(username, password);
 
     if (status == UserStatus.SUCCESS) {
-      request.setAttribute("logincreated", "true");
-      getServletContext().getRequestDispatcher("/login").forward(request,
-          response);
+      response.sendRedirect(request.getContextPath() + "/login?status=new");
     } else if (status == UserStatus.FAILED) {
-      request.setAttribute("usernameexists", "true");
-      getServletContext().getRequestDispatcher("/signup").forward(request,
+      request.setAttribute("usernameExists", "true");
+      getServletContext().getRequestDispatcher("/signuppage").forward(request,
           response);
     } else if (status == UserStatus.USERNAMEBLANK) {
-      request.setAttribute("emptyattribute", "username");
-      getServletContext().getRequestDispatcher("/signup").forward(request,
+      request.setAttribute("emptyAttribute", "username");
+      getServletContext().getRequestDispatcher("/signuppage").forward(request,
           response);
     } else if (status == UserStatus.PASSWORDBLANK) {
-      request.setAttribute("emptyattribute", "password");
-      getServletContext().getRequestDispatcher("/signup").forward(request,
+      request.setAttribute("emptyAttribute", "password");
+      getServletContext().getRequestDispatcher("/signuppage").forward(request,
           response);
     }
   }

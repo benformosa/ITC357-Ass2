@@ -11,13 +11,19 @@
 <body>
 	<h1>Email</h1>
 
+	<c:if test="${param.error == 'login'}">
+		<div class="error">Please log in</div>
+	</c:if>
+
 	<jsp:doBody />
 
 	<br>
 	<br>
 	<footer>
 		<div class="links">
-			<a href="<c:url value="/secure/main" />">Inbox</a> <a href="<c:url value="/secure/users" />">Users</a> <a href="<c:url value="/secure/newmessage" />">New Message</a>
+			<a href="<c:url value="/secure/inbox" />">Inbox</a> <a
+				href="<c:url value="/secure/users" />">Users</a> <a
+				href="<c:url value="/secure/newmessage" />">New Message</a>
 		</div>
 		<div class="login">
 			<a href="<c:url value="/logout" />">Log out

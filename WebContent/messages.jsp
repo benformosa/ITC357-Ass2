@@ -5,6 +5,7 @@
 
 <t:layout>
 	<h2>Inbox</h2>
+
 	<c:set var="messages" scope="session" value="${requestScope.messages}" />
 	<c:choose>
 		<c:when test="${empty messages}">
@@ -21,8 +22,7 @@
 						<td><c:out value="${m.sender}" />
 						</td>
 						<td><a href="<c:url value="/secure/message?id=${m.id}" />"><c:out
-									value="${m.subject}" />
-						</a></td>
+									value="${m.subject}" /> </a></td>
 					</tr>
 				</c:forEach>
 			</table>

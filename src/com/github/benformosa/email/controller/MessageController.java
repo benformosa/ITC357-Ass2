@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import com.github.benformosa.email.model.Message;
 import com.github.benformosa.email.model.MessageDAO;
 
-@SuppressWarnings("serial")
 public class MessageController extends HttpServlet {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)

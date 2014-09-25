@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.github.benformosa.email.model.UserDAO;
 
-@SuppressWarnings("serial")
 public class UserController extends HttpServlet {
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)

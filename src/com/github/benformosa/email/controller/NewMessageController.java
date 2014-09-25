@@ -11,8 +11,9 @@ import javax.servlet.http.HttpSession;
 import com.github.benformosa.email.model.MessageDAO;
 import com.github.benformosa.email.model.MessageDAO.MessageStatus;
 
-@SuppressWarnings("serial")
 public class NewMessageController extends HttpServlet {
+  private static final long serialVersionUID = 1L;
+
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -32,8 +33,8 @@ public class NewMessageController extends HttpServlet {
 
     if (status == MessageStatus.SUCCESS) {
       request.setAttribute("messagesent", "true");
-      getServletContext().getRequestDispatcher("/secure/main").forward(request,
-          response);
+      getServletContext().getRequestDispatcher("/secure/inbox").forward(
+          request, response);
     } else if (status == MessageStatus.FAILED) {
       request.setAttribute("messagesent", "false");
       getServletContext().getRequestDispatcher("/secure/newmessage").forward(

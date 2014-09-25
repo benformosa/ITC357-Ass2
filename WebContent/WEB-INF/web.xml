@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>ITC357-Ass2</display-name>
 	<welcome-file-list>
-		<welcome-file>secure/main</welcome-file>
+		<welcome-file>secure/inbox</welcome-file>
 	</welcome-file-list>
 
 	<servlet-mapping>
@@ -19,12 +19,12 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Login</servlet-name>
-		<url-pattern>/login</url-pattern>
+		<url-pattern>/loginpage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Logout</servlet-name>
-		<jsp-file>/logout.jsp</jsp-file>
+    <servlet-class>com.github.benformosa.email.controller.LogoutController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Logout</servlet-name>
@@ -37,7 +37,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SignUp</servlet-name>
-		<url-pattern>/signup</url-pattern>
+		<url-pattern>/signuppage</url-pattern>
 	</servlet-mapping>
 	
 	 <servlet>
@@ -64,7 +64,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginController</servlet-name>
-		<url-pattern>/logincontroller</url-pattern>
+		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -73,7 +73,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>SignUpController</servlet-name>
-		<url-pattern>/signupcontroller</url-pattern>
+		<url-pattern>/signup</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

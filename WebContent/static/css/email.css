@@ -35,3 +35,7 @@ tr:nth-child(odd) td {
 .error {
   color: red;
 }
+
+.info {
+  color: green;
+}
