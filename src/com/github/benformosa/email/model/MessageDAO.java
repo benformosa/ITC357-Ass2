@@ -12,11 +12,11 @@ import java.util.List;
 import com.github.benformosa.email.util.ConnectionFactory;
 
 public class MessageDAO {
-  private Connection connection;
-
   public static enum MessageStatus {
-    SENDERBLANK, RECIPIENTBLANK, SUBJECTBLANK, NOSUCHUSER, FAILED, SUCCESS
+    FAILED, NOSUCHUSER, RECIPIENTBLANK, SENDERBLANK, SUBJECTBLANK, SUCCESS
   }
+
+  private Connection connection;
 
   public MessageDAO(Connection connection) {
     this.connection = connection;
@@ -28,6 +28,70 @@ public class MessageDAO {
     } catch (IOException | SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  /*
+   * delete the message with the given id only if it has no recipients
+   */
+  private void deleteMessage(int id) {
+    String[] recipients = getRecipients(id);
+
+    // if the message has no recipients
+    if (recipients.length == 0) {
+      String query = "delete from messages where id = ?";
+      PreparedStatement s = null;
+      try {
+        s = connection.prepareStatement(query);
+        s.setInt(1, id);
+        s.executeUpdate();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        try {
+          s.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /*
+   * given a message id and recipient, delete the message for that user
+   */
+  public void deleteMessage(int id, String recipient) {
+    deleteRecipient(id, recipient);
+    deleteMessage(id);
+  }
+
+  /*
+   * delete the recipient for the message with the given id
+   */
+  private void deleteRecipient(int id, String recipient) {
+    String query = "delete from recipients where messageid = ? and recipient = ?";
+
+    PreparedStatement s = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setInt(1, id);
+      s.setString(2, recipient);
+      s.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /*
+   * get all non-trash messages with the given username as a recipient
+   */
+  public Message[] getInbox(String username) {
+    return getMessages(username, false);
   }
 
   /*
@@ -74,85 +138,6 @@ public class MessageDAO {
     return message;
   }
 
-  public void trashMessage(int id, String recipient) {
-    setTrash(id, recipient, true);
-  }
-
-  public void unTrashMessage(int id, String recipient) {
-    setTrash(id, recipient, false);
-  }
-
-  /*
-   * update trash column for recipient of message with given id
-   */
-  public void setTrash(int id, String recipient, boolean trash) {
-
-    String query = "update recipients set trash = ? where messageid = ? and recipient = ?";
-    PreparedStatement s = null;
-    try {
-      s = connection.prepareStatement(query);
-
-      s.setBoolean(1, trash);
-      s.setInt(2, id);
-      s.setString(3, recipient);
-      s.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        s.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
-  /*
-   * get all recipients for the message with the given id
-   */
-  public String[] getRecipients(int id) {
-    List<String> recipients = new ArrayList<String>();
-
-    String query = "select recipients.recipient " + "from messages "
-      + "inner join recipients on messages.id = recipients.messageid "
-      + "where messages.id = ?";
-
-    PreparedStatement s = null;
-    ResultSet r = null;
-    try {
-      s = connection.prepareStatement(query);
-      s.setInt(1, id);
-      try {
-        r = s.executeQuery();
-
-        while (r.next()) {
-          String recipient = r.getString(Message.messageColumnRecipient);
-          recipients.add(recipient);
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      } finally {
-        r.close();
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        s.close();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return recipients.toArray(new String[recipients.size()]);
-  }
-
-  /*
-   * get all non-trash messages with the given username as a recipient
-   */
-  public Message[] getInbox(String username) {
-    return getMessages(username, false);
-  }
-
   /*
    * get all messages with the given username as a recipient
    */
@@ -197,6 +182,52 @@ public class MessageDAO {
       }
     }
     return messages.toArray(new Message[messages.size()]);
+  }
+
+  /*
+   * get all recipients for the message with the given id
+   */
+  public String[] getRecipients(int id) {
+    List<String> recipients = new ArrayList<String>();
+
+    String query = "select recipients.recipient " + "from messages "
+      + "inner join recipients on messages.id = recipients.messageid "
+      + "where messages.id = ?";
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setInt(1, id);
+      try {
+        r = s.executeQuery();
+
+        while (r.next()) {
+          String recipient = r.getString(Message.messageColumnRecipient);
+          recipients.add(recipient);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return recipients.toArray(new String[recipients.size()]);
+  }
+
+  /*
+   * get all trash messages with the given username as a recipient
+   */
+  public Message[] getTrash(String username) {
+    return getMessages(username, true);
   }
 
   // insert a message and return its id
@@ -289,6 +320,7 @@ public class MessageDAO {
     for (String recipient : recipients) {
       if (userDAO.getUser(recipient) != null) {
         recipientsExist.add(recipient);
+        userDAO.contact(sender, recipient);
       }
     }
 
@@ -311,50 +343,18 @@ public class MessageDAO {
   }
 
   /*
-   * given a message id and recipient, delete the message for that user
+   * update trash column for recipient of message with given id
    */
-  public void deleteMessage(int id, String recipient) {
-    deleteRecipient(id, recipient);
-    deleteMessage(id);
-  }
+  public void setTrash(int id, String recipient, boolean trash) {
 
-  /*
-   * delete the message with the given id only if it has no recipients
-   */
-  private void deleteMessage(int id) {
-    String[] recipients = getRecipients(id);
-
-    // if the message has no recipients
-    if (recipients.length == 0) {
-      String query = "delete from messages where id = ?";
-      PreparedStatement s = null;
-      try {
-        s = connection.prepareStatement(query);
-        s.setInt(1, id);
-        s.executeUpdate();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      } finally {
-        try {
-          s.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  }
-
-  /*
-   * delete the recipient for the message with the given id
-   */
-  private void deleteRecipient(int id, String recipient) {
-    String query = "delete from recipients where messageid = ? and recipient = ?";
-
+    String query = "update recipients set trash = ? where messageid = ? and recipient = ?";
     PreparedStatement s = null;
     try {
       s = connection.prepareStatement(query);
-      s.setInt(1, id);
-      s.setString(2, recipient);
+
+      s.setBoolean(1, trash);
+      s.setInt(2, id);
+      s.setString(3, recipient);
       s.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -368,9 +368,16 @@ public class MessageDAO {
   }
 
   /*
-   * get all trash messages with the given username as a recipient
+   * Mark message with given id as trash for given recipient
    */
-  public Message[] getTrash(String username) {
-    return getMessages(username, true);
+  public void trashMessage(int id, String recipient) {
+    setTrash(id, recipient, true);
+  }
+
+  /*
+   * Mark message with given id as not trash for given recipient
+   */
+  public void unTrashMessage(int id, String recipient) {
+    setTrash(id, recipient, false);
   }
 }

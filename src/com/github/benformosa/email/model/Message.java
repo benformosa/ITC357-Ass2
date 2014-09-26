@@ -3,7 +3,6 @@ package com.github.benformosa.email.model;
 import java.io.Serializable;
 
 public class Message implements Serializable {
-  private static final long serialVersionUID = 1L;
   public static final String messageColumnBody = "body";
   public static final String messageColumnId = "id";
   public static final String messageColumnRecipient = "recipient";
@@ -11,6 +10,7 @@ public class Message implements Serializable {
   public static final String messageColumnSubject = "subject";
   public static final String messageColumnTrash = "trash";
   public static final String messageTable = "messages";
+  private static final long serialVersionUID = 1L;
 
   public String body;
   public int id;

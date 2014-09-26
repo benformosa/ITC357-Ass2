@@ -45,3 +45,8 @@ delete from recipients where messageid = 1 and recipient = 'harvey';
 
 #delete message by id
 delete from messages where id = 1
+
+#get users user has contacted
+select sender, recipient
+from contact 
+where sender = 'a';

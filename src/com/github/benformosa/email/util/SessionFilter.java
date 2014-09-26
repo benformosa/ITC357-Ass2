@@ -15,8 +15,7 @@ public class SessionFilter implements Filter {
   private String contextPath;
 
   @Override
-  public void init(FilterConfig fc) throws ServletException {
-    contextPath = fc.getServletContext().getContextPath();
+  public void destroy() {
   }
 
   @Override
@@ -45,6 +44,7 @@ public class SessionFilter implements Filter {
   }
 
   @Override
-  public void destroy() {
+  public void init(FilterConfig fc) throws ServletException {
+    contextPath = fc.getServletContext().getContextPath();
   }
 }

@@ -15,10 +15,11 @@
 
 			<form id="user" action="user" method="POST" accept-charset="UTF-8">
 				<label for="username">Username</label> <br> <input type="text"
-					id="username" name="username" value=${sessionScope.username} readonly disabled>
-				<br> <label for="Name">Name</label> <br> <input
-					type="text" id="name" name="name" value=${user.name}> <br>
-				<input type="submit" value="Update">
+					id="username" name="username" value=${sessionScope.username
+					}
+					readonly disabled> <br> <label for="Name">Name</label>
+				<br> <input type="text" id="name" name="name" value=${user.name}>
+				<br> <input type="submit" value="Update">
 
 			</form>
 		</c:when>
@@ -27,12 +28,15 @@
 				<tr>
 					<th>Name</th>
 					<th>Username</th>
+					<th></th>
 				</tr>
 				<tr>
 					<td><c:out value="${user.name}" /></td>
+					<td><c:out value="${user.username}" />
+					</td>
 					<td><a
-						href="<c:url value="/secure/newmessage?to=${user.username}" />"><c:out
-								value="${user.username}" /> </a></td>
+						href="<c:url value="/secure/newmessage?to=${user.username}" />">Send
+							Message</a></td>
 				</tr>
 			</table>
 		</c:otherwise>

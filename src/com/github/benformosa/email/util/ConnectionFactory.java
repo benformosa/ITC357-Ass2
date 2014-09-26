@@ -12,6 +12,18 @@ import java.util.Properties;
 public class ConnectionFactory {
   public static final String defaultPropertiesFileName = "db.properties";
 
+  // create a connection, assuming the default filename in the current directory
+  public static Connection getConnection() throws IOException, SQLException {
+    return getPropertiesFileConnection(defaultPropertiesFileName);
+  }
+
+  // create a connection, assuming the default filename in the given directory
+  public static Connection getConnection(String configFilePath)
+      throws IOException, SQLException {
+    return getPropertiesFileConnection(new File(configFilePath,
+        defaultPropertiesFileName));
+  }
+
   /*
    * Create a new connection given the database server details.
    */
@@ -63,17 +75,5 @@ public class ConnectionFactory {
   public static Connection getPropertiesFileConnection(String fileName)
       throws IOException, SQLException {
     return getPropertiesFileConnection(new File(fileName));
-  }
-
-  // create a connection, assuming the default filename in the current directory
-  public static Connection getConnection() throws IOException, SQLException {
-    return getPropertiesFileConnection(defaultPropertiesFileName);
-  }
-
-  // create a connection, assuming the default filename in the given directory
-  public static Connection getConnection(String configFilePath)
-      throws IOException, SQLException {
-    return getPropertiesFileConnection(new File(configFilePath,
-        defaultPropertiesFileName));
   }
 }

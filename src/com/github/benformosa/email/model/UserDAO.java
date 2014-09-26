@@ -12,11 +12,11 @@ import com.github.benformosa.email.util.ConnectionFactory;
 import com.github.benformosa.email.util.Passwords;
 
 public class UserDAO {
-  private Connection connection;
-
   public static enum UserStatus {
-    USERNAMEBLANK, PASSWORDBLANK, FAILED, SUCCESS
+    FAILED, PASSWORDBLANK, SUCCESS, USERNAMEBLANK
   }
+
+  private Connection connection;
 
   public UserDAO(Connection connection) {
     this.connection = connection;
@@ -30,55 +30,23 @@ public class UserDAO {
     }
   }
 
-  // get the user with the given username. returns null if no user with that
-  // name exists.
-  public User getUser(String username) {
-    User[] users = getUsers(username);
-
-    if (users == null) {
-      return null;
-    } else if (users.length == 0) {
-      return null;
-    } else {
-      return users[0];
-    }
-  }
-
-  // get an array of all users
-  public User[] getUsers() {
-    return getUsers(null);
-  }
-
   /*
-   * return the user with the given username. If the username is null, return
-   * all users.
+   * get an array of the usernames of the users that have contacted the given
+   * recipient.
    */
-  public User[] getUsers(String username) {
-    List<User> users = new ArrayList<User>();
-
-    String query = "select " + User.userColumnUsername + ","
-      + User.userColumnName + " from " + User.userTable;
-
-    if (username != null) {
-      query += " where " + User.userColumnUsername + "= ?";
-    }
+  public String[] contactedBy(String recipient) {
+    List<String> contacters = new ArrayList<String>();
+    String query = "select sender from contact where recipient = ?";
 
     PreparedStatement s = null;
     ResultSet r = null;
     try {
       s = connection.prepareStatement(query);
-
-      if (username != null) {
-        s.setString(1, username);
-      }
-
+      s.setString(1, recipient);
       try {
         r = s.executeQuery();
-
         while (r.next()) {
-          String un = r.getString(User.userColumnUsername);
-          String name = r.getString(User.userColumnName);
-          users.add(new User(un, name));
+          contacters.add(r.getString("sender"));
         }
       } catch (SQLException e) {
         e.printStackTrace();
@@ -94,9 +62,110 @@ public class UserDAO {
         e.printStackTrace();
       }
     }
-    return users.toArray(new User[users.size()]);
+    return contacters.toArray(new String[contacters.size()]);
   }
 
+  /*
+   * get an array of the usernames of the users that the given sender has
+   * contacted.
+   */
+  public String[] allContacted(String sender) {
+    List<String> contacted = new ArrayList<String>();
+    String query = "select recipient from contact where sender = ?";
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setString(1, sender);
+      try {
+        r = s.executeQuery();
+        while (r.next()) {
+          contacted.add(r.getString("recipient"));
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return contacted.toArray(new String[contacted.size()]);
+  }
+
+  /*
+   * Checks if sender has ever sent a message to recipient
+   */
+  public boolean contacted(String sender, String recipient) {
+    boolean contacted = false;
+    String query = "select recipient from contact "
+      + "where sender = ? and recipient = ?";
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setString(1, sender);
+      s.setString(2, recipient);
+      try {
+        r = s.executeQuery();
+
+        while (r.next()) {
+          contacted = true;
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return contacted;
+  }
+
+  /*
+   * Mark sender has having contacted recipient
+   */
+  public void contact(String sender, String recipient) {
+
+    String query = "insert into contact (sender, recipient) values (?, ?)";
+    PreparedStatement s = null;
+    try {
+      s = connection.prepareStatement(query);
+
+      s.setString(1, sender);
+      s.setString(2, recipient);
+      s.executeUpdate();
+    } catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
+      // row already exists
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /*
+   * check if given username and password match database
+   */
   public UserStatus authenticate(String username, String password) {
     if (username.isEmpty() | username == null) {
       return UserStatus.USERNAMEBLANK;
@@ -151,6 +220,81 @@ public class UserDAO {
     return authenticated;
   }
 
+  /*
+   * get the user with the given username. returns null if no user with that
+   * name exists.
+   */
+  public User getUser(String username) {
+    User[] users = getUsers(username);
+
+    if (users == null) {
+      return null;
+    } else if (users.length == 0) {
+      return null;
+    } else {
+      return users[0];
+    }
+  }
+
+  /*
+   * get an array of all users
+   */
+  public User[] getUsers() {
+    return getUsers(null);
+  }
+
+  /*
+   * return the user with the given username. If the username is null, return
+   * all users.
+   */
+  public User[] getUsers(String username) {
+    List<User> users = new ArrayList<User>();
+
+    String query = "select " + User.userColumnUsername + ","
+      + User.userColumnName + " from " + User.userTable;
+
+    if (username != null) {
+      query += " where " + User.userColumnUsername + "= ?";
+    }
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+
+      if (username != null) {
+        s.setString(1, username);
+      }
+
+      try {
+        r = s.executeQuery();
+
+        while (r.next()) {
+          String un = r.getString(User.userColumnUsername);
+          String name = r.getString(User.userColumnName);
+          users.add(new User(un, name));
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return users.toArray(new User[users.size()]);
+  }
+
+  /*
+   * create a new user with the given username and password. checks if the
+   * username is available first;
+   */
   public UserStatus newUser(String username, String password) {
     if (username.isEmpty() | username == null) {
       return UserStatus.USERNAMEBLANK;

@@ -15,6 +15,8 @@ import javax.crypto.spec.PBEKeySpec;
 // https://stackoverflow.com/questions/18142745/how-do-i-generate-a-salt-in-java-for-salted-hash
 public class Passwords {
 
+  private static final int ITERATIONS = 10000;
+  private static final int KEY_LENGTH = 256;
   /**
    * A utility class to hash passwords and check passwords vs hashed values. It
    * uses a combination of hashing and unique salt. The algorithm used is
@@ -25,13 +27,28 @@ public class Passwords {
    */
 
   private static final Random RANDOM = new SecureRandom();
-  private static final int ITERATIONS = 10000;
-  private static final int KEY_LENGTH = 256;
 
   /**
-   * static utility class
+   * Generates a random password of a given length, using letters and digits.
+   * 
+   * @param length
+   *          the length of the password
+   * 
+   * @return a random password
    */
-  private Passwords() {
+  public static String generateRandomPassword(int length) {
+    StringBuilder sb = new StringBuilder(length);
+    for (int i = 0; i < length; i++) {
+      int c = RANDOM.nextInt(62);
+      if (c <= 9) {
+        sb.append(String.valueOf(c));
+      } else if (c < 36) {
+        sb.append((char) ('a' + c - 10));
+      } else {
+        sb.append((char) ('A' + c - 36));
+      }
+    }
+    return sb.toString();
   }
 
   /**
@@ -103,25 +120,8 @@ public class Passwords {
   }
 
   /**
-   * Generates a random password of a given length, using letters and digits.
-   * 
-   * @param length
-   *          the length of the password
-   * 
-   * @return a random password
+   * static utility class
    */
-  public static String generateRandomPassword(int length) {
-    StringBuilder sb = new StringBuilder(length);
-    for (int i = 0; i < length; i++) {
-      int c = RANDOM.nextInt(62);
-      if (c <= 9) {
-        sb.append(String.valueOf(c));
-      } else if (c < 36) {
-        sb.append((char) ('a' + c - 10));
-      } else {
-        sb.append((char) ('A' + c - 36));
-      }
-    }
-    return sb.toString();
+  private Passwords() {
   }
 }

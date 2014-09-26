@@ -6,6 +6,10 @@
 <t:layout>
 	<h2>Users</h2>
 	<c:set var="users" scope="session" value="${requestScope.users}" />
+	<c:set var="contacted" scope="session"
+		value="${requestScope.contacted}" />
+	<c:set var="contacters" scope="session"
+		value="${requestScope.contacters}" />
 	<c:choose>
 		<c:when test="${empty users}">
 No users found.
@@ -15,6 +19,8 @@ No users found.
 				<tr>
 					<th>Name</th>
 					<th>Username</th>
+					<th>Sent Message</th>
+					<th>Recieved Message</th>
 					<th></th>
 				</tr>
 				<c:forEach var="u" items="${users}">
@@ -23,11 +29,22 @@ No users found.
 						</td>
 						<td><a
 							href="<c:url value="/secure/user?user=${u.username}" />"><c:out
-									value="${u.username}" />
-						</a></td>
+									value="${u.username}" /> </a></td>
+						<td><c:forEach var="recipient" items="${contacted}">
+								<c:if test="${recipient eq u.username}">
+								Yes
+							</c:if>
+							</c:forEach>
+						</td>
+						<td><c:forEach var="sender" items="${contacters}">
+								<c:if test="${sender eq u.username}">
+								Yes
+							</c:if>
+							</c:forEach>
+						</td>
 						<td><a
 							href="<c:url value="/secure/newmessage?to=${u.username}" />">Send
-								Message</a></td>
+								message</a></td>
 					</tr>
 				</c:forEach>
 			</table>

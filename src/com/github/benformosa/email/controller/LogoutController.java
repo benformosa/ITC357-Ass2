@@ -16,7 +16,7 @@ public class LogoutController extends HttpServlet {
       throws ServletException, IOException {
     HttpSession session = request.getSession();
 
-    boolean wasValid = (session.getAttribute("username") != null);
+    boolean wasValid = session.getAttribute("username") != null;
     session.setAttribute("username", null);
     session.invalidate();
 

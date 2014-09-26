@@ -21,7 +21,7 @@ public class UserController extends HttpServlet {
         .getRealPath("/WEB-INF"));
 
     try {
-      String username = (String) request.getParameter("user");
+      String username = request.getParameter("user");
 
       if (username == null) {
         response.sendRedirect(request.getContextPath() + "/secure/users");
