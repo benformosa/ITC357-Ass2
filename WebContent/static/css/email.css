@@ -32,6 +32,11 @@ tr:nth-child(odd) td {
   background: lightgrey;
 }
 
+pre {
+	font-family: verdana;
+	background: lightgrey;
+}
+
 .error {
   color: red;
 }

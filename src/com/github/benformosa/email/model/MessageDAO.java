@@ -14,7 +14,7 @@ public class MessageDAO {
   private Connection connection;
 
   public static enum MessageStatus {
-    SENDERBLANK, RECIPIENTBLANK, SUBJECTBLANK, FAILED, SUCCESS
+    SENDERBLANK, RECIPIENTBLANK, SUBJECTBLANK, NOSUCHUSER, FAILED, SUCCESS
   }
 
   public MessageDAO(String configPath) {
@@ -25,6 +25,10 @@ public class MessageDAO {
     }
   }
 
+  /*
+   * get the message with the given ID returns a Message or null if that ID
+   * doesn't exist
+   */
   public Message getMessage(int id) {
     String query = "select " + Message.messageColumnId + ","
       + Message.messageColumnSender + "," + Message.messageColumnRecipient
@@ -65,6 +69,9 @@ public class MessageDAO {
     return message;
   }
 
+  /*
+   * get all messages with the given username as a recipient
+   */
   public Message[] getMessages(String username) {
     List<Message> messages = new ArrayList<Message>();
 
@@ -107,6 +114,10 @@ public class MessageDAO {
     return messages.toArray(new Message[messages.size()]);
   }
 
+  /*
+   * send a message Checks that sender, recipient and subject are not empty or
+   * null, checks the given recipient exists, then create a new message.
+   */
   public MessageStatus sendMessage(String sender, String recipient,
       String subject, String body) {
     if (sender.isEmpty() | sender == null) {
@@ -119,20 +130,40 @@ public class MessageDAO {
       return MessageStatus.SUBJECTBLANK;
     }
 
+    String query = "select " + User.userColumnUsername + " from "
+      + User.userTable + " where " + User.userColumnUsername + " = ?";
+
     PreparedStatement s = null;
+    ResultSet r = null;
     try {
-      s = connection.prepareStatement("insert into " + Message.messageTable
-        + " (" + Message.messageColumnSender + ","
-        + Message.messageColumnRecipient + "," + Message.messageColumnSubject
-        + "," + Message.messageColumnBody + ") " + "values (?, ?, ?, ?)");
+      s = connection.prepareStatement(query);
+      s.setString(1, recipient);
+      try {
+        r = s.executeQuery();
 
-      s.setString(1, sender);
-      s.setString(2, recipient);
-      s.setString(3, subject);
-      s.setString(4, body);
-      s.executeUpdate();
+        // if recipient exists
+        if (r.next()) {
+          s = connection.prepareStatement("insert into " + Message.messageTable
+            + " (" + Message.messageColumnSender + ","
+            + Message.messageColumnRecipient + ","
+            + Message.messageColumnSubject + "," + Message.messageColumnBody
+            + ") " + "values (?, ?, ?, ?)");
 
-      return MessageStatus.SUCCESS;
+          s.setString(1, sender);
+          s.setString(2, recipient);
+          s.setString(3, subject);
+          s.setString(4, body);
+          s.executeUpdate();
+
+          return MessageStatus.SUCCESS;
+        } else {
+          return MessageStatus.NOSUCHUSER;
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {

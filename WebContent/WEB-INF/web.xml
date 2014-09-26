@@ -24,7 +24,7 @@
 
 	<servlet>
 		<servlet-name>Logout</servlet-name>
-    <servlet-class>com.github.benformosa.email.controller.LogoutController</servlet-class>
+		<servlet-class>com.github.benformosa.email.controller.LogoutController</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Logout</servlet-name>
@@ -39,24 +39,24 @@
 		<servlet-name>SignUp</servlet-name>
 		<url-pattern>/signuppage</url-pattern>
 	</servlet-mapping>
-	
-	 <servlet>
-    <servlet-name>NewMessage</servlet-name>
-    <jsp-file>/newmessage.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>NewMessage</servlet-name>
-    <url-pattern>/secure/newmessage</url-pattern>
-  </servlet-mapping>
-  
-     <servlet>
-    <servlet-name>NewMessageController</servlet-name>
-    <servlet-class>com.github.benformosa.email.controller.NewMessageController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>NewMessageController</servlet-name>
-    <url-pattern>/secure/newmessagecontroller</url-pattern>
-  </servlet-mapping>
+
+	<servlet>
+		<servlet-name>NewMessage</servlet-name>
+		<jsp-file>/newmessage.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NewMessage</servlet-name>
+		<url-pattern>/secure/newmessage</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>NewMessageController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.NewMessageController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NewMessageController</servlet-name>
+		<url-pattern>/secure/newmessagecontroller</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>LoginController</servlet-name>
@@ -82,27 +82,26 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>MessagesController</servlet-name>
-		<url-pattern>/secure/main</url-pattern>
 		<url-pattern>/secure/inbox</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Messages</servlet-name>
-		<jsp-file>/messages.jsp</jsp-file>
+		<jsp-file>/inbox.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Messages</servlet-name>
 		<url-pattern>/secure/messages</url-pattern>
 	</servlet-mapping>
 
-  <servlet>
-    <servlet-name>UserController</servlet-name>
-    <servlet-class>com.github.benformosa.email.controller.UserController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UserController</servlet-name>
-    <url-pattern>/secure/users</url-pattern>
-  </servlet-mapping>
+	<servlet>
+		<servlet-name>UserController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.UserController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserController</servlet-name>
+		<url-pattern>/secure/users</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Users</servlet-name>
@@ -113,14 +112,14 @@
 		<url-pattern>/secure/userspage</url-pattern>
 	</servlet-mapping>
 
-  <servlet>
-    <servlet-name>MessageController</servlet-name>
-    <servlet-class>com.github.benformosa.email.controller.MessageController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MessageController</servlet-name>
-    <url-pattern>/secure/message</url-pattern>
-  </servlet-mapping>
+	<servlet>
+		<servlet-name>MessageController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.MessageController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessageController</servlet-name>
+		<url-pattern>/secure/message</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Message</servlet-name>

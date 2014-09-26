@@ -21,7 +21,7 @@ public class MessagesController extends HttpServlet {
     MessageDAO messageDAO = new MessageDAO(this.getServletConfig()
         .getServletContext().getRealPath("/WEB-INF"));
 
-    // get a list of messages and forward to messages.jsp
+    // get a list of messages and forward to inbox.jsp
     request.setAttribute("messages",
         messageDAO.getMessages((String) session.getAttribute("username")));
 

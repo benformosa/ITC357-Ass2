@@ -9,6 +9,6 @@ create table ST11429074email.messages (
   sender varchar(40) not null,
   recipient varchar(40) not null,
   subject varchar(200) not null,
-  body varchar(1000),
+  body text,
   primary key (id));
 alter table ST11429074email.messages auto_increment=1;

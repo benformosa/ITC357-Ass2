@@ -32,26 +32,24 @@ public class NewMessageController extends HttpServlet {
     status = messageDAO.sendMessage(sender, recipient, subject, body);
 
     if (status == MessageStatus.SUCCESS) {
-      request.setAttribute("messagesent", "true");
-      getServletContext().getRequestDispatcher("/secure/inbox").forward(
-          request, response);
+      response.sendRedirect(request.getContextPath()
+        + "/secure/inbox?status=sent");
     } else if (status == MessageStatus.FAILED) {
-      request.setAttribute("messagesent", "false");
+      request.setAttribute("messageSent", "false");
       getServletContext().getRequestDispatcher("/secure/newmessage").forward(
           request, response);
-    } else if (status == MessageStatus.SENDERBLANK) {
-      request.setAttribute("emptyattribute", "sender");
+    } else if (status == MessageStatus.NOSUCHUSER) {
+      request.setAttribute("messageSent", "nosuchuser");
       getServletContext().getRequestDispatcher("/secure/newmessage").forward(
           request, response);
     } else if (status == MessageStatus.RECIPIENTBLANK) {
-      request.setAttribute("emptyattribute", "recipient");
+      request.setAttribute("emptyAttribute", "recipient");
       getServletContext().getRequestDispatcher("/secure/newmessage").forward(
           request, response);
     } else if (status == MessageStatus.SUBJECTBLANK) {
-      request.setAttribute("emptyattribute", "subject");
+      request.setAttribute("emptyAttribute", "subject");
       getServletContext().getRequestDispatcher("/secure/newmessage").forward(
           request, response);
     }
-
   }
 }

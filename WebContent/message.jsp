@@ -5,16 +5,31 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t"%>
 
 <t:layout>
-	 <c:set var="message" scope="session" value="${requestScope.message}" />
-  <c:choose>
-    <c:when test="${empty message}">
+	<c:set var="message" scope="session" value="${requestScope.message}" />
+	<c:choose>
+		<c:when test="${empty message}">
   No message found.
 </c:when>
-    <c:otherwise>
-	<h3>
-		From
-		<c:out value="${message.sender}" /></h3>
-	<blockquote><c:out value="${message.body}" /></blockquote>
-</c:otherwise>
-</c:choose>
+		<c:otherwise>
+			<strong class="from">
+				From
+				<c:out value="${message.sender}" />
+			</strong>
+			<br>
+			<i class="subject">
+				<c:out value="${message.subject}" />
+			</i>
+			<pre class="body">
+<c:out value="${message.body}" />
+			</pre>
+			<br>
+
+			<c:url value="newmessage" var="reply">
+				<c:param name="to" value="${message.sender}" />
+				<c:param name="subject" value="RE: ${message.subject}" />
+			</c:url>
+
+			<a href="<c:url value="${reply}" />">Reply</a>
+		</c:otherwise>
+	</c:choose>
 </t:layout>
