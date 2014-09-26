@@ -27,9 +27,9 @@
 			</c:when>
 		</c:choose>
 
-		<label for="recipient">To</label><br> <input type="text"
+		<label for="recipient">To:<br>required, separate usernames with semicolons (;)</label><br> <input type="text"
 			id="recipient" name="recipient" value=${param.to}><br> <label
-			for="subject">Subject</label><br> <input type="text"
+			for="subject">Subject: required</label><br> <input type="text"
 			id="subject" name="subject" value="${param.subject}"><br>
 		<label for="body">Body</label><br>
 		<textarea id=body name=body form="newmessage"></textarea>

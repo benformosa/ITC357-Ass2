@@ -18,6 +18,10 @@ public class UserDAO {
     USERNAMEBLANK, PASSWORDBLANK, FAILED, SUCCESS
   }
 
+  public UserDAO(Connection connection) {
+    this.connection = connection;
+  }
+
   public UserDAO(String configFilePath) {
     try {
       connection = ConnectionFactory.getConnection(configFilePath);
@@ -58,6 +62,40 @@ public class UserDAO {
       }
     }
     return users.toArray(new User[users.size()]);
+  }
+
+  public User getUser(String username) {
+    User user = null;
+
+    String query = "select " + User.userColumnUsername + " from "
+      + User.userTable + " where " + User.userColumnUsername + " = ?";
+
+    PreparedStatement s = null;
+    ResultSet r = null;
+    try {
+      s = connection.prepareStatement(query);
+      s.setString(1, username);
+      try {
+        r = s.executeQuery();
+
+        while (r.next()) {
+          user = new User(r.getString("username"));
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      } finally {
+        r.close();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        s.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return user;
   }
 
   public UserStatus authenticate(String username, String password) {

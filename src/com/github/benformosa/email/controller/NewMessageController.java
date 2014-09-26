@@ -29,7 +29,14 @@ public class NewMessageController extends HttpServlet {
 
     MessageStatus status;
 
-    status = messageDAO.sendMessage(sender, recipient, subject, body);
+    // convert recipient to array. recipients should be separated by ; with
+    // optional whitespace around the ;
+    String[] recipientArray = new String[0];
+    if (recipient != null & !recipient.isEmpty()) {
+      recipientArray = recipient.split("\\s*;\\s*");
+    }
+
+    status = messageDAO.sendMessage(sender, recipientArray, subject, body);
 
     if (status == MessageStatus.SUCCESS) {
       response.sendRedirect(request.getContextPath()

@@ -24,10 +24,9 @@ public class MessageController extends HttpServlet {
 
     try {
       int id = Integer.parseInt(request.getParameter("id"));
-      Message message = messageDAO.getMessage(id);
-      if (message.getRecipient().equals(session.getAttribute("username"))) {
-        request.setAttribute("message", message);
-      }
+      Message message = messageDAO.getMessage(id,
+          (String) session.getAttribute("username"));
+      request.setAttribute("message", message);
     } catch (NumberFormatException | NullPointerException e) {
     }
     getServletContext().getRequestDispatcher("/secure/messagepage").forward(
