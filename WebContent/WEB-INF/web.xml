@@ -113,13 +113,22 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>UserController</servlet-name>
-		<servlet-class>com.github.benformosa.email.controller.UserController</servlet-class>
+		<servlet-name>UsersController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.UsersController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>UserController</servlet-name>
+		<servlet-name>UsersController</servlet-name>
 		<url-pattern>/secure/users</url-pattern>
 	</servlet-mapping>
+	
+	 <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>com.github.benformosa.email.controller.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/secure/user</url-pattern>
+  </servlet-mapping>
 
 	<servlet>
 		<servlet-name>DeleteMessageController</servlet-name>
@@ -174,6 +183,15 @@
 		<servlet-name>Message</servlet-name>
 		<url-pattern>/secure/messagepage</url-pattern>
 	</servlet-mapping>
+	
+	 <servlet>
+    <servlet-name>User</servlet-name>
+    <jsp-file>/user.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>User</servlet-name>
+    <url-pattern>/secure/userpage</url-pattern>
+  </servlet-mapping>
 
 	<filter>
 		<filter-name>SessionFilter</filter-name>

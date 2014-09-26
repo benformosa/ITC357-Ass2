@@ -24,7 +24,9 @@
 			<a href="<c:url value="/secure/inbox" />">Inbox</a> <a
 				href="<c:url value="/secure/trash" />">Trash</a> <a
 				href="<c:url value="/secure/users" />">Users</a> <a
-				href="<c:url value="/secure/newmessage" />">New Message</a>
+				href="<c:url value="/secure/user?user=${sessionScope.username}" />">Edit
+				profile</a> <a href="<c:url value="/secure/newmessage" />">New
+				Message</a>
 		</div>
 		<div class="login">
 			<a href="<c:url value="/logout" />">Log out

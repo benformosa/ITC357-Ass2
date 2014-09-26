@@ -1,3 +1,12 @@
+TODO:
+write report
+user: update profile
+contact: new table. add a row when user sends to a new recipient for the first time
+messages: add column date and time
+recipient: read and unread
+recipient: cc, bcc
+
+
 Submit database dump - i.e. text file of SQL statements. 
 
 JSTL library:

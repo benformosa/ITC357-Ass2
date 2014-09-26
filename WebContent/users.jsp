@@ -13,14 +13,21 @@ No users found.
 		<c:otherwise>
 			<table>
 				<tr>
-					<th>Users</th>
+					<th>Name</th>
+					<th>Username</th>
+					<th></th>
 				</tr>
 				<c:forEach var="u" items="${users}">
 					<tr>
-						<td><a
-							href="<c:url value="/secure/newmessage?to=${u.username}" />"><c:out
-									value="${u.username}" /> </a>
+						<td><c:out value="${u.name}" />
 						</td>
+						<td><a
+							href="<c:url value="/secure/user?user=${u.username}" />"><c:out
+									value="${u.username}" />
+						</a></td>
+						<td><a
+							href="<c:url value="/secure/newmessage?to=${u.username}" />">Send
+								Message</a></td>
 					</tr>
 				</c:forEach>
 			</table>
