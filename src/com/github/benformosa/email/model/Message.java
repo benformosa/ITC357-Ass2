@@ -9,6 +9,7 @@ public class Message implements Serializable {
   public static final String messageColumnRecipient = "recipient";
   public static final String messageColumnSender = "sender";
   public static final String messageColumnSubject = "subject";
+  public static final String messageColumnTrash = "trash";
   public static final String messageTable = "messages";
 
   public String body;
@@ -16,14 +17,16 @@ public class Message implements Serializable {
   public String recipient;
   public String sender;
   public String subject;
+  public boolean trash;
 
   public Message(int id, String sender, String recipient, String subject,
-      String body) {
+      String body, boolean trash) {
     this.id = id;
     this.sender = sender;
     this.recipient = recipient;
     this.subject = subject;
     this.body = body;
+    this.trash = trash;
   }
 
   public String getBody() {
@@ -44,5 +47,9 @@ public class Message implements Serializable {
 
   public String getSubject() {
     return subject;
+  }
+
+  public boolean isTrash() {
+    return trash;
   }
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.github.benformosa.email.model.MessageDAO;
 
-public class MessagesController extends HttpServlet {
+public class UnTrashMessageController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -21,11 +21,10 @@ public class MessagesController extends HttpServlet {
     MessageDAO messageDAO = new MessageDAO(this.getServletConfig()
         .getServletContext().getRealPath("/WEB-INF"));
 
-    // get a list of messages and forward to inbox.jsp
-    request.setAttribute("messages",
-        messageDAO.getMessages((String) session.getAttribute("username")));
+    int id = Integer.parseInt(request.getParameter("id"));
+    messageDAO.unTrashMessage(id, (String) session.getAttribute("username"));
 
-    getServletContext().getRequestDispatcher("/secure/messages").forward(
-        request, response);
+    getServletContext().getRequestDispatcher("/secure/trash").forward(request,
+        response);
   }
 }

@@ -77,21 +77,39 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>MessagesController</servlet-name>
-		<servlet-class>com.github.benformosa.email.controller.MessagesController</servlet-class>
+		<servlet-name>InboxController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.InboxController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>MessagesController</servlet-name>
+		<servlet-name>InboxController</servlet-name>
 		<url-pattern>/secure/inbox</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>Messages</servlet-name>
+		<servlet-name>TrashController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.TrashController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TrashController</servlet-name>
+		<url-pattern>/secure/trash</url-pattern>
+	</servlet-mapping>
+	
+	 <servlet>
+    <servlet-name>Trash</servlet-name>
+    <jsp-file>/trash.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Trash</servlet-name>
+    <url-pattern>/secure/trashpage</url-pattern>
+  </servlet-mapping>
+
+	<servlet>
+		<servlet-name>Inbox</servlet-name>
 		<jsp-file>/inbox.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Messages</servlet-name>
-		<url-pattern>/secure/messages</url-pattern>
+		<servlet-name>Inbox</servlet-name>
+		<url-pattern>/secure/inboxpage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -102,6 +120,33 @@
 		<servlet-name>UserController</servlet-name>
 		<url-pattern>/secure/users</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteMessageController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.DeleteMessageController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteMessageController</servlet-name>
+		<url-pattern>/secure/deletemessage</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TrashMessageController</servlet-name>
+		<servlet-class>com.github.benformosa.email.controller.TrashMessageController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TrashMessageController</servlet-name>
+		<url-pattern>/secure/trashmessage</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+    <servlet-name>UnTrashMessageController</servlet-name>
+    <servlet-class>com.github.benformosa.email.controller.UnTrashMessageController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UnTrashMessageController</servlet-name>
+    <url-pattern>/secure/untrashmessage</url-pattern>
+  </servlet-mapping>
 
 	<servlet>
 		<servlet-name>Users</servlet-name>

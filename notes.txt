@@ -13,12 +13,26 @@ insert into recipients (messageid, recipient) values (1, 'b');
 insert into messages (sender, subject, body) values ('harvey','foo', 'ahoy');
 insert into recipients (messageid, recipient) values (2, 'a');
 
-select messages.id, messages.sender, recipients.recipient, messages.subject, messages.body
-FROM ST11429074email.messages
-INNER JOIN ST11429074email.recipients on messages.id = recipients.messageid
-where recipients.recipient = 'harvey';
+#get messages by recipient
+select messages.id, messages.sender, recipients.recipient, messages.subject, messages.body 
+from messages 
+inner join recipients on messages.id = recipients.messageid
+where recipients.recipient = 'a' and recipients.trash = ?;
 
+#get message by id and recipient
 select messages.id, messages.sender, recipients.recipient, messages.subject, messages.body 
 from messages 
 inner join recipients on messages.id = recipients.messageid
  where messages.id = 1 and recipient = 'harvey';
+ 
+#get recipients of message by id
+select  recipients.recipient
+from messages 
+inner join recipients on messages.id = recipients.messageid
+ where messages.id = 1;
+
+#delete recipient by messageid and recipient
+delete from recipients where messageid = 1 and recipient = 'harvey';
+
+#delete message by id
+delete from messages where id = 1

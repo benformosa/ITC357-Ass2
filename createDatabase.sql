@@ -17,5 +17,6 @@ alter table ST11429074email.messages auto_increment=1;
 create table ST11429074email.recipients (
   messageid int not null,
   recipient varchar(40) not null,
+  boolean trash not null default false,
   primary key (messageid, recipient));
 

@@ -11,14 +11,10 @@
   No message found.
 </c:when>
 		<c:otherwise>
-			<strong class="from">
-				From
-				<c:out value="${message.sender}" />
+			<strong class="from"> From <c:out value="${message.sender}" />
 			</strong>
 			<br>
-			<i class="subject">
-				<c:out value="${message.subject}" />
-			</i>
+			<i class="subject"> <c:out value="${message.subject}" /> </i>
 			<pre class="body">
 <c:out value="${message.body}" />
 			</pre>
@@ -30,6 +26,16 @@
 			</c:url>
 
 			<a href="<c:url value="${reply}" />">Reply</a>
+			<c:choose>
+				<c:when test="${message.trash}">
+					<a href="<c:url value="/secure/untrashmessage?id=${message.id}" />">Send
+						to Inbox</a>
+					<a href="<c:url value="/secure/deletemessage?id=${message.id}" />">Delete</a>
+				</c:when>
+				<c:otherwise>
+					<a href="<c:url value="/secure/trashmessage?id=${message.id}" />">Trash</a>
+				</c:otherwise>
+			</c:choose>
 		</c:otherwise>
 	</c:choose>
 </t:layout>
