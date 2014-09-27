@@ -13,7 +13,7 @@
 	<c:choose>
 		<c:when test="${empty users}">
 No users found.
-</c:when>
+    </c:when>
 		<c:otherwise>
 			<table>
 				<tr>
@@ -43,7 +43,7 @@ No users found.
 							</c:forEach>
 						</td>
 						<td><a
-							href="<c:url value="/secure/newmessage?to=${u.username}" />">Send
+							href="<c:url value="/secure/newmessage?recipient=${u.username}" />">Send
 								message</a></td>
 					</tr>
 				</c:forEach>

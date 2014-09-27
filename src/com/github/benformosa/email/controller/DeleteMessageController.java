@@ -24,7 +24,7 @@ public class DeleteMessageController extends HttpServlet {
     int id = Integer.parseInt(request.getParameter("id"));
     messageDAO.deleteMessage(id, (String) session.getAttribute("username"));
 
-    getServletContext().getRequestDispatcher("/secure/trash").forward(request,
-        response);
+    response.sendRedirect(request.getContextPath()
+      + "/secure/trash?status=deleted");
   }
 }

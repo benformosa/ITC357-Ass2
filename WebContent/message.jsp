@@ -21,7 +21,7 @@
 			<br>
 
 			<c:url value="newmessage" var="reply">
-				<c:param name="to" value="${message.sender}" />
+				<c:param name="recipient" value="${message.sender}" />
 				<c:param name="subject" value="RE: ${message.subject}" />
 			</c:url>
 

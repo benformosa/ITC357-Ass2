@@ -6,15 +6,20 @@
 <t:layout>
 	<h2>Trash</h2>
 
-	<c:if test="${param.status == 'sent'}">
-		<div class="info">Message sent.</div>
-		<br>
-	</c:if>
-
-	<c:if test="${param.status == 'deleted'}">
-		<div class="info">Message deleted.</div>
-		<br>
-	</c:if>
+	<c:choose>
+		<c:when test="${param.status == 'sent'}">
+			<div class="info">Message sent.</div>
+			<br>
+		</c:when>
+		<c:when test="${param.status == 'untrashed'}">
+			<div class="info">Message sent to Inbox.</div>
+			<br>
+		</c:when>
+		<c:when test="${param.status == 'deleted'}">
+			<div class="info">Message deleted.</div>
+			<br>
+		</c:when>
+	</c:choose>
 
 	<c:set var="messages" scope="session" value="${requestScope.messages}" />
 	<c:choose>

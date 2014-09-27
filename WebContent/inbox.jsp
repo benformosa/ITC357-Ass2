@@ -6,15 +6,16 @@
 <t:layout>
 	<h2>Inbox</h2>
 
-	<c:if test="${param.status == 'sent'}">
-		<div class="info">Message sent.</div>
-		<br>
-	</c:if>
-
-	<c:if test="${param.status == 'trashed'}">
-		<div class="info">Message moved to trash.</div>
-		<br>
-	</c:if>
+	<c:choose>
+		<c:when test="${param.status == 'sent'}">
+			<div class="info">Message sent.</div>
+			<br>
+		</c:when>
+		<c:when test="${param.status == 'trashed'}">
+			<div class="info">Message moved to trash.</div>
+			<br>
+		</c:when>
+	</c:choose>
 
 	<c:set var="messages" scope="session" value="${requestScope.messages}" />
 	<c:choose>
@@ -30,12 +31,13 @@
 				</tr>
 				<c:forEach var="m" items="${messages}">
 					<tr>
-						<td><c:out value="${m.sender}" /></td>
+						<td><c:out value="${m.sender}" />
+						</td>
 						<td><a href="<c:url value="/secure/message?id=${m.id}" />"><c:out
-									value="${m.subject}" /> </a>
-						</td>
-						<td><a href="<c:url value="/secure/trashmessage?id=${m.id}" />">Send to Trash</a>
-						</td>
+									value="${m.subject}" /> </a></td>
+						<td><a
+							href="<c:url value="/secure/trashmessage?id=${m.id}" />">Send
+								to Trash</a></td>
 					</tr>
 				</c:forEach>
 			</table>

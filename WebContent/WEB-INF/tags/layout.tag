@@ -11,10 +11,6 @@
 <body>
 	<h1>Email</h1>
 
-	<c:if test="${param.error == 'login'}">
-		<div class="error">Please log in</div>
-	</c:if>
-
 	<jsp:doBody />
 
 	<br>

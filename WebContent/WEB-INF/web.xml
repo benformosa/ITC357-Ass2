@@ -46,7 +46,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>NewMessage</servlet-name>
-		<url-pattern>/secure/newmessage</url-pattern>
+		<url-pattern>/secure/newmessagepage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -55,7 +55,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>NewMessageController</servlet-name>
-		<url-pattern>/secure/newmessagecontroller</url-pattern>
+		<url-pattern>/secure/newmessage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

@@ -1,7 +1,8 @@
 TODO:
 write report
-user: update profile
-contact: new table. add a row when user sends to a new recipient for the first time
+user: update profile, more columns
+signup: check for special characters, lowercase username
+login: lowercase username
 messages: add column date and time
 recipient: read and unread
 recipient: cc, bcc

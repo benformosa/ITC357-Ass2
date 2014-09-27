@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="deploy" name="11429074Email">
+	<property file="build.properties" />
+
+	<property name="war-file-name" value="${project-name}.war" />
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.7" />
+	<property name="source" value="1.7" />
+	<path id="Web App Libraries.libraryclasspath">
+		<pathelement location="WebContent/WEB-INF/lib/jstl-1.2.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/mysql.jar" />
+	</path>
+	<path id="EAR Libraries.libraryclasspath" />
+	<path id="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath">
+		<pathelement location="/usr/share/tomcat7/lib/commons-dbcp.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-api.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/el-api.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-i18n-es.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-util.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/catalina.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/jasper.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-i18n-fr.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/servlet-api.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/catalina-ant.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/commons-pool.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-i18n-ja.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/annotations-api.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/jasper-el.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/jsp-api.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/catalina-tribes.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-jdbc.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/tomcat-coyote.jar" />
+		<pathelement location="/usr/share/tomcat7/lib/catalina-ha.jar" />
+	</path>
+	<path id="ITC357-Ass2.classpath">
+		<pathelement location="build/classes" />
+		<path refid="Web App Libraries.libraryclasspath" />
+		<path refid="EAR Libraries.libraryclasspath" />
+		<pathelement location="WebContent/WEB-INF/lib/mysql.jar" />
+		<pathelement location="WebContent/WEB-INF/lib/jstl-1.2.jar" />
+		<path refid="Apache Tomcat v7.0 [Apache Tomcat v7.0].libraryclasspath" />
+	</path>
+	<path id="catalina-ant-classpath">
+		<fileset dir="WebContent/WEB-INF/lib">
+			<include name="catalina-ant.jar" />
+			<include name="tomcat-coyote.jar" />
+			<include name="tomcat-util.jar" />
+			<include name="tomcat-juli.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="catalina-deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="catalina-ant-classpath" />
+	<taskdef name="catalina-start" classname="org.apache.catalina.ant.StartTask" classpathref="catalina-ant-classpath" />
+	<taskdef name="catalina-stop" classname="org.apache.catalina.ant.StopTask" classpathref="catalina-ant-classpath" />
+	<taskdef name="catalina-undeploy" classname="org.apache.catalina.ant.UndeployTask" classpathref="catalina-ant-classpath" />
+
+	<target name="stop" description="stop application in tomcat">
+		<stop url="${tomcat-manager-url}" username="${tomcat-manager-username}" password="${tomcat-manager-password}" path="/${project-name}" />
+	</target>
+
+	<target name="start" description="start application in tomcat">
+		<start url="${tomcat-manager-url}" username="${tomcat-manager-username}" password="${tomcat-manager-password}" path="/${project-name}" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="build/classes" />
+		<copy includeemptydirs="false" todir="build/classes">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="build/classes" />
+		<delete file="${war-file-name}" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="init" name="build">
+		<echo message="${project-name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="ITC357-Ass2.classpath" />
+		</javac>
+	</target>
+
+	<target name="war" description="Bundles the application as a WAR file" depends="clean, build">
+		<mkdir dir="WebContent/WEB-INF/classes" />
+
+		<copy includeemptydirs="false" todir="WebContent/WEB-INF/classes">
+			<fileset dir="build/classes">
+				<include name="**/*.class" />
+			</fileset>
+		</copy>
+
+		<war destfile="${war-file-name}" basedir="WebContent" needxmlfile="false">
+		</war>
+	</target>
+
+	<target name="undeploy" description="undeploy from tomcat">
+		<catalina-undeploy failonerror="no" url="${tomcat-manager-url}/text" username="${tomcat-manager-username}" password="${tomcat-manager-password}" path="/${project-name}" />
+	</target>
+
+	<target name="deploy" description="deploy to tomcat" depends="clean, build, war, undeploy">
+		<catalina-deploy url="${tomcat-manager-url}/text" username="${tomcat-manager-username}" password="${tomcat-manager-password}" path="/${project-name}" war="file:${war-file-name}" />
+	</target>
+</project>

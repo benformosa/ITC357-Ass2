@@ -24,7 +24,7 @@ public class TrashMessageController extends HttpServlet {
     int id = Integer.parseInt(request.getParameter("id"));
     messageDAO.trashMessage(id, (String) session.getAttribute("username"));
 
-    getServletContext().getRequestDispatcher("/secure/inbox").forward(request,
-        response);
+    response.sendRedirect(request.getContextPath()
+      + "/secure/inbox?status=trashed");
   }
 }

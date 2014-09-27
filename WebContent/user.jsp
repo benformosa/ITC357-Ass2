@@ -5,7 +5,8 @@
 
 <t:layout>
 	<c:set var="user" scope="session" value="${requestScope.user}" />
-
+	<h2><c:out value="${user.username}'s Profile" /></h2>
+	
 	<c:choose>
 		<c:when test="${user.username == sessionScope.username}">
 
@@ -31,12 +32,13 @@
 					<th></th>
 				</tr>
 				<tr>
-					<td><c:out value="${user.name}" /></td>
-					<td><c:out value="${user.username}" />
+					<td><c:out value="${user.name}" />
 					</td>
+					<td><c:out value="${user.username}" /></td>
 					<td><a
-						href="<c:url value="/secure/newmessage?to=${user.username}" />">Send
-							Message</a></td>
+						href="<c:url value="/secure/newmessage?recipient=${user.username}" />">Send
+							Message</a>
+					</td>
 				</tr>
 			</table>
 		</c:otherwise>

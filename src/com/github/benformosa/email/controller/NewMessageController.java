@@ -15,6 +15,13 @@ public class NewMessageController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    getServletContext().getRequestDispatcher("/secure/newmessagepage").forward(
+        request, response);
+  }
+
+  @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     HttpSession session = request.getSession();
@@ -43,20 +50,20 @@ public class NewMessageController extends HttpServlet {
         + "/secure/inbox?status=sent");
     } else if (status == MessageStatus.FAILED) {
       request.setAttribute("messageSent", "false");
-      getServletContext().getRequestDispatcher("/secure/newmessage").forward(
-          request, response);
+      getServletContext().getRequestDispatcher("/secure/newmessagepage")
+          .forward(request, response);
     } else if (status == MessageStatus.NOSUCHUSER) {
       request.setAttribute("messageSent", "nosuchuser");
-      getServletContext().getRequestDispatcher("/secure/newmessage").forward(
-          request, response);
+      getServletContext().getRequestDispatcher("/secure/newmessagepage")
+          .forward(request, response);
     } else if (status == MessageStatus.RECIPIENTBLANK) {
       request.setAttribute("emptyAttribute", "recipient");
-      getServletContext().getRequestDispatcher("/secure/newmessage").forward(
-          request, response);
+      getServletContext().getRequestDispatcher("/secure/newmessagepage")
+          .forward(request, response);
     } else if (status == MessageStatus.SUBJECTBLANK) {
       request.setAttribute("emptyAttribute", "subject");
-      getServletContext().getRequestDispatcher("/secure/newmessage").forward(
-          request, response);
+      getServletContext().getRequestDispatcher("/secure/newmessagepage")
+          .forward(request, response);
     }
   }
 }
