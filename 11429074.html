@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Ben Formosa 11429074" />
+  <title>ITC357-Assignment 2 Report</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  
+  
+  
+  
+  
+</head>
+<body>
+<div id="header">
+<h1 class="title">ITC357-Assignment 2 Report</h1>
+<h2 class="author">Ben Formosa 11429074</h2>
+</div>
+<!-- pandoc readme.md -o 11429074.pdf -f markdown+auto_identifiers -s -V papersize:"a4paper" -->
+
+<h1 id="email-web-application">Email web application</h1>
+<p>This is a simple web-based email system, using JavaServer Pages and Java Servlets and backed by a MySQL database.</p>
+<p>It follows a Model-View-Controller pattern. Browser actions GET and POST are handled by controller Servlets, which pass data to JSP views, which handle how the page is displayed in the browser. Database actions are handled by Data Access Objects (DAO), which generally translate database data into instances of the model classes.</p>
+<h2 id="database">Database</h2>
+<p>Users have a unique username, which is also the primary key of the <code>users</code> table. Hashed and salted passwords are stored with their salt.</p>
+<p>Messages have an automatically incremented id and use the text data type for the body of the message. As messages can be sent to muliple recipients, the recipients are stored in another table.</p>
+<p>The <code>recipients</code> table has a row for each recipient of each message. It includes a boolean value <code>trash</code> which indicates if it should be displayed in the Inbox or Trash.</p>
+<h1 id="build-and-deploy">Build and Deploy</h1>
+<h2 id="pre-requisites">Pre-requisites</h2>
+<p>I tested using Tomcat 7 and MySQL 14.14 on Ubuntu:</p>
+<pre><code>$ /usr/share/tomcat7/bin/version.sh
+Using CATALINA_BASE:   /usr/share/tomcat7
+Using CATALINA_HOME:   /usr/share/tomcat7
+Using CATALINA_TMPDIR: /usr/share/tomcat7/temp
+Using JRE_HOME:        /usr
+Using CLASSPATH:       /usr/share/tomcat7/bin/bootstrap.jar:/usr/share/tomcat7/bin/tomcat-juli.jar
+Server version: Apache Tomcat/7.0.52 (Ubuntu)
+Server built:   Jul 24 2014 08:38:51
+Server number:  7.0.52.0
+OS Name:        Linux
+OS Version:     3.13.0-34-generic
+Architecture:   amd64
+JVM Version:    1.7.0_65-b32
+JVM Vendor:     Oracle Corporation</code></pre>
+<pre><code>$ mysql -V
+mysql  Ver 14.14 Distrib 5.5.38, for debian-linux-gnu (x86_64) using readline 6.3</code></pre>
+<p>The following libraries should be in the directory <code>WebContent/WEB-INF/lib</code></p>
+<pre><code>catalina-ant.jar
+jstl-1.2.jar
+mysql.jar
+tomcat-coyote.jar
+tomcat-juli.jar
+tomcat-util.jar</code></pre>
+<h2 id="database-setup">Database setup</h2>
+<p>The application uses MySQL as its database. To create the database and tables, run this command:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">mysql</span> -u root -p <span class="kw">&lt;</span> database.sql</code></pre>
+<p>After the database is created, load the demo data with:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">mysql</span> -u root -p ST11429074email <span class="kw">&lt;</span> demo.sql</code></pre>
+<p>This includes the users and data as seen in the screenshots <a href="#run">below</a>. All users have their username as their password.</p>
+<p>The application uses a properties file <code>WebContent/WEB-INF/db.properties</code>. Edit this file to select a database server. The user will need read and write access to the database. The default values are:</p>
+<pre class="properties"><code>user=root
+password=abc123
+server=localhost
+port=3306
+database=ST11429074email</code></pre>
+<h2 id="deploy">Deploy</h2>
+<p>I built and deployed using ant and Tomcat Manager:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">ant</span> deploy</code></pre>
+<p>You could also build hotel.war and deploy to Tomcat via the admin gui.<br />Create the war file with <code>ant war</code>, then deploy using the Tomcat Manager page.</p>
+<p><img src="image/deploy.png" alt="Deploy to Tomcat Admin" /> </p>
+<p></p>
+<h1 id="run">Run</h1>
+<p>Browse to the context path <a href="http://localhost:8080/11429074Email/">http://localhost:8080/11429074Email/</a>:</p>
+<h2 id="sign-up">Sign up</h2>
+<p>When signing up, the chosen username is checked against existing usernames to warn against duplicates.</p>
+<p><img src="image/signup-inuse.png" alt="Username in use" /> </p>
+<p>After successfully signing up, the user is redirected to the login page and invited to log in.<br />Passwords are hashed using password-based encryption. A <a href="http://docs.oracle.com/javase/7/docs/api/javax/crypto/spec/PBEKeySpec.html"><code>PBEKeySpec</code></a> is created with the chosen password and a salt which is generated using <a href="http://docs.oracle.com/javase/7/docs/api/java/security/SecureRandom.html"><code>SecureRandom</code></a>. The hash is generated using <a href="http://docs.oracle.com/javase/7/docs/api/javax/crypto/SecretKey.html"><code>SecretKey</code></a> with the <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory">PBKDF2WithHmacSHA1 algorithm</a>. The hashed password and salt are stored with the username in the database.</p>
+<p><img src="image/login-signedup.png" alt="Signed up" /> </p>
+<h2 id="log-in">Log in</h2>
+<p>Pages that require a login to view are under the path <code>secure</code>. The filter <code>SessionFilter</code> is applied to that path to check if a user is logged in. When you attempt to browse to such a page without being logged in, you will be directed to the login page.</p>
+<p><img src="image/login-login.png" alt="Please log in" /> </p>
+<p>When the login button is clicked, the application checks that a username and password have been entered.</p>
+<p><img src="image/login-nousername.png" alt="No username entered" /> </p>
+<p>When a username and password is entered, the application checks the combination against the database.</p>
+<p><img src="image/login-wrongpassword.png" alt="Incorrect username or password" /> </p>
+<p>Logging in takes the user to their Inbox. There is a row of links at the bottom of every page for accessing all the functions of the application.</p>
+<p><img src="image/inbox-empty.png" alt="Inbox" /> </p>
+<h2 id="your-profile">Your profile</h2>
+<p>Clicking <em>Edit Profile</em> takes the user to their profile page, which includes a form for updating their details.</p>
+<p><img src="image/profile.png" alt="Edit profile" /> </p>
+<p>The user can enter their name and click <em>Update</em>.</p>
+<p><img src="image/profile-updated.png" alt="Updated profile" /> </p>
+<h2 id="user-list">User list</h2>
+<p>Clicking the <em>Users</em> link takes the user to a list of all registered users. From here they can view another user's profile or send a message.</p>
+<p><img src="image/users.png" alt="All users" /> </p>
+<p>If the user clicks the username of another user, they can view that user's profile.</p>
+<p><img src="image/user.png" alt="Profile" /> </p>
+<h2 id="sending-messages">Sending messages</h2>
+<p>Clicking the <em>Send Message</em> link on the Profile or the User List directs the user to the New Message page with the <em>To</em> field pre-filled.</p>
+<p><img src="image/send-viauser.png" alt="Send Message from Profile" /> </p>
+<p>When attempting to send a message, the application checks that a recipient and a subject have been entered.</p>
+<p><img src="image/send-norecipient.png" alt="No recipient specified" /> </p>
+<p><img src="image/send-nosubject.png" alt="No subject specified" /> </p>
+<p>The application will also warn the user if the recipient doesn't exist.</p>
+<p><img src="image/send-nouser.png" alt="No such user" /> </p>
+<p>After a message is sent, the user is redirected to the Inbox.</p>
+<p><img src="image/send-filled.png" alt="Sending a message" /> </p>
+<p><img src="image/inbox-sent.png" alt="Message sent" /> </p>
+<p>The User List is updated to show that a message has been sent to that user.</p>
+<p><img src="image/users-sent.png" alt="Message sent to user" /> </p>
+<h3 id="multiple-recipients">Multiple recipients</h3>
+<p>Messages can be sent to mulitple recipients by specified many usernames separated with semicolons.</p>
+<p><img src="image/send-many.png" alt="Send to many" /> </p>
+<p><img src="image/users-sentmany.png" alt="Messages sent" /> </p>
+<h2 id="receiving-messages">Receiving messages</h2>
+<p>Received messages appear in the Inbox.</p>
+<p><img src="image/inbox.png" alt="Message received" /> </p>
+<p>The user can click the subject to view the message.</p>
+<p><img src="image/message.png" alt="Message" /> </p>
+<p>The user can click <em>Reply</em> to reply to the message. The <em>To</em> and <em>Subject</em> fields are pre-filled.</p>
+<p><img src="image/send-reply.png" alt="Reply" /> </p>
+<p>The User List is updated to show that a message has been recived from that user.</p>
+<p><img src="image/users-received.png" alt="Message received from user" /> </p>
+<h2 id="trash">Trash</h2>
+<p>From the Message or Inbox, the user can send messages to the Trash. This sets the <code>trash</code> column in the <code>recipients</code> table to true.</p>
+<p><img src="image/inbox-trashed.png" alt="Moved to trash" /> </p>
+<p>Messages in the Trash can be moved back to the Inbox.</p>
+<p><img src="image/trash-untrashed.png" alt="Moved to Inbox" /> </p>
+<p>Messages can be deleted from Trash. Deleting a message deletes the row for that message for the current user from the <code>recipients</code> table. If the are no recipients for a message, that message is deleted from the <code>messages</code> table.</p>
+<p><img src="image/trash-deleted.png" alt="Message deleted" /> </p>
+<h2 id="logout">Logout</h2>
+<p>Clicking <em>Logout</em> invalidates the user's session and redirects the user to the login page.</p>
+<p><img src="image/logout.png" alt="Logged out" /> </p>
+</body>
+</html>
