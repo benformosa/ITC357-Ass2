@@ -1,0 +1,43 @@
+---
+version: '3.5'
+
+services:
+  app:
+    image: benformosa/itc357-ass2
+    ports:
+      - "8080:8080"
+    networks: 
+      - database
+      - web
+  database:
+    image: mysql:5.7
+    networks: 
+      - database
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123
+    configs:
+      - source: dbcreate_sql
+        target: /docker-entrypoint-initdb.d/database.sql
+      - source: dbdata_sql
+        target: /docker-entrypoint-initdb.d/demo.sql
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    networks:
+      - web
+    configs:
+      - source: nginx
+        target: /etc/nginx/conf.d/default.conf
+
+configs:
+  dbcreate_sql:
+    file: ./database.sql
+  dbdata_sql:
+    file: ./demo.sql
+  nginx:
+    file: ./nginx.conf
+
+networks:
+  database:
+  web:

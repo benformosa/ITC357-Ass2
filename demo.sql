@@ -15,6 +15,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+USE `ST11429074email`;
+
 --
 -- Dumping data for table `contact`
 --
@@ -51,7 +53,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('anisur','@gj(myJúñ£`¸lÜ_ôNæe‘’³VuJ-]+	³','\ZíM	dW]|„^o&ƒb','Anisur Rahman'),('ben','¨Ú1)¯S\"ÿ](kØ~ÉT.£¿¦ôQŠ×Ò¨‰Á~,','vG\"´ìÉ}™bÅtß¢','Benjamin'),('joan','BðX)áù–ƒiú£°kfò×äR6âbáÛ','=ëÁYšƒ	lpCŽ´”T','Joan'),('mary','óïhÃùº[\ZKXÌkVEZ—›(×WË½ì¢©Dk','Ý\r£Cõ’+5åÝ¤ûÔ¿Ÿ',NULL);
+INSERT INTO `users` VALUES ('anisur','@gj(myJï¿½ï¿½`ï¿½lï¿½_ï¿½Nï¿½eï¿½ï¿½ï¿½VuJ-]+	ï¿½','\Zï¿½M	dW]|ï¿½^o&ï¿½ï¿½b','Anisur Rahman'),('ben','ï¿½ï¿½1)ï¿½S\"ï¿½](kï¿½~ï¿½T.ï¿½ï¿½ï¿½ï¿½Qï¿½ï¿½Ò¨ï¿½ï¿½~,','vG\"ï¿½ï¿½ï¿½}ï¿½bï¿½tß¢','Benjamin'),('joan','Bï¿½X)ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½kfï¿½ï¿½ï¿½R6ï¿½bï¿½ï¿½','=ï¿½ï¿½Yï¿½ï¿½	lpCï¿½ï¿½ï¿½T','Joan'),('mary','ï¿½ï¿½hï¿½ï¿½ï¿½[\ZKXï¿½kVEZï¿½ï¿½(ï¿½WË½ì¢©Dk','ï¿½\rï¿½Cï¿½ï¿½+5ï¿½Ý¤ï¿½Ô¿ï¿½',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

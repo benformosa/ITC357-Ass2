@@ -41,10 +41,13 @@ COPY . ${WORKDIR}
 # Build WAR file
 RUN ant war
 
+########
+
 ## Second stage - Run application
 FROM tomcat:7-jre7 as run
 
+# The container should listen on this port
 EXPOSE 8080
 
 # Copy WAR from build stage
-COPY --from=build /usr/src/app/11429074Email.war webapps/Email.war
+COPY --from=build /usr/src/app/11429074Email.war webapps/email.war  
